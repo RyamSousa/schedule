@@ -1,0 +1,14 @@
+@media screen and (max-width: 600px) {
+    .form-container {
+        display: flex;
+        height: 70%;
+        align-items: center;
+        justify-content: center;
+        font-family: sans-serif;
+    }
+
+    .form-content {
+        display: flex;
+        flex-direction: column;
+    }
+}

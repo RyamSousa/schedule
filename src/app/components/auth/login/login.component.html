@@ -1,0 +1,26 @@
+<div class="form-container">
+    <div class="form-content">
+        <h1>Login</h1>
+        <mat-form-field class="input-cpf" appearance="fill">
+            <mat-label>CPF</mat-label>
+            <input matInput [formControl]="email" maxlength="20" />
+        </mat-form-field>
+        <mat-form-field class="input-password" appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input
+                maxlength="8"
+                matInput
+                [formControl]="password"
+                [type]="hide ? 'password' : 'text'"
+            />
+            <button mat-icon-button matSuffix (click)="hide = !hide">
+                <mat-icon>{{
+                    hide ? "visibility_off" : "visibility"
+                }}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-raised-button color="primary" (click)="login()">
+            Entrar
+        </button>
+    </div>
+</div>

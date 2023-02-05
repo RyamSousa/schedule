@@ -1,16 +1,11 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./components/auth/login/login.component";
+import { CalendarComponent } from "./calendar.component";
 
-const routes: Routes = [
-	{
-		path: "",
-		component: LoginComponent,
-	},
-];
+const routes: Routes = [{ path: "calendar", component: CalendarComponent }];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],
 	exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class CalendarRoutingModule {}

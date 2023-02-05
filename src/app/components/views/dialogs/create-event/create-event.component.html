@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Marque seu horário</h1>
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Serviço</mat-label>
+        <mat-select>
+            <mat-option value="option1">Sobrancelha</mat-option>
+            <mat-option value="option2" disabled
+                >Cabelo e Barba (indisponível)</mat-option
+            >
+            <mat-option value="option3">Maquiagem</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()">Cancelar</button>
+    <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Salvar</button>
+</div>
