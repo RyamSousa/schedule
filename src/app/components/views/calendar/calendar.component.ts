@@ -9,19 +9,16 @@ import { MatDialog } from "@angular/material/dialog";
 import { CreateEventComponent } from "../dialogs/create-event/create-event.component";
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
+import { ApiService } from "src/app/services/api-service.service";
+import { Services } from "src/app/temporary-utils/services";
 
-export interface Service {
-	name: string;
-	value: number;
-	time: string;
-}
 @Component({
 	selector: "app-calendar",
 	templateUrl: "./calendar.component.html",
 	styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
-	services: Service | undefined;
+	services: Services | undefined;
 
 	calendarVisible = true;
 
@@ -50,10 +47,12 @@ export class CalendarComponent implements OnInit {
 	constructor(
 		private changeDetector: ChangeDetectorRef,
 		private calendarService: CalendarService,
+		private apiService: ApiService,
 		private dialog: MatDialog
 	) {}
 
 	ngOnInit(): void {
+		this.calendarOptions["initialEvents"] = this.apiService.getServices();
 		if (this.isMobile()) {
 			this.calendarOptions["initialView"] = "timeGrid";
 			this.calendarOptions["headerToolbar"] = {

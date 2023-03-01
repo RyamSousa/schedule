@@ -1,22 +1,20 @@
-import { DialogRef } from "@angular/cdk/dialog";
 import { Injectable } from "@angular/core";
 import { DateSelectArg } from "@fullcalendar/core";
-import { Service } from "../components/views/calendar/calendar.component";
-import { UserDataLogin } from "../models/user-data-login";
+import { Services } from "../temporary-utils/services";
 
 @Injectable({ providedIn: "platform" })
 export class CalendarService {
-	addEvent(selectInfo: DateSelectArg, data: Service) {
+	addEvent(selectInfo: DateSelectArg, data: Services) {
 		const calendarApi = selectInfo.view.calendar;
 
 		let result = this.canAddEvent(selectInfo);
 		console.log(result);
 
 		if (result) {
-			calendarApi.unselect(); // clear date selection
+			calendarApi.unselect();
 			calendarApi.addEvent({
 				id: "",
-				title: data.name,
+				title: data.title,
 				start: selectInfo.startStr,
 				end: selectInfo.endStr,
 				allDay: selectInfo.allDay,
@@ -37,9 +35,6 @@ export class CalendarService {
 			let actualDay = actualStart.getDay();
 			let selectedDay = actualStart.getDay();
 
-			console.log(selectStart, selectEnd);
-			console.log(actualStart, actualEnd);
-			console.log(actualDay, selectedDay);
 			if (selectedDay === actualDay) {
 				// case 1: data com inicio fora e fim dentro do range
 				if (

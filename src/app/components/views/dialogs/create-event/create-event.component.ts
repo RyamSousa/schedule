@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Service } from "../../calendar/calendar.component";
+import { Services } from "src/app/temporary-utils/services";
 
 @Component({
 	selector: "app-create-event",
@@ -13,7 +13,7 @@ export class CreateEventComponent implements OnInit {
 
 	constructor(
 		private dialogRef: MatDialogRef<CreateEventComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: Service
+		@Inject(MAT_DIALOG_DATA) public data: Services
 	) {}
 
 	ngOnInit(): void {
