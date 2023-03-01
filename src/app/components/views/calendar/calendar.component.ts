@@ -1,37 +1,43 @@
-import { ChangeDetectorRef, Component } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import listPlugin from "@fullcalendar/list";
 import localePt from "@fullcalendar/core/locales/pt";
-import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateEventComponent } from "../dialogs/create-event/create-event.component";
+import { CalendarService } from "src/app/services/calendar-service.service";
+import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 
+export interface Service {
+	name: string;
+	value: number;
+	time: string;
+}
 @Component({
 	selector: "app-calendar",
 	templateUrl: "./calendar.component.html",
 	styleUrls: ["./calendar.component.scss"],
 })
-export class CalendarComponent {
-	animal: string = "";
-	name: string = "";
+export class CalendarComponent implements OnInit {
+	services: Service | undefined;
+
 	calendarVisible = true;
 
 	calendarOptions: CalendarOptions = {
 		plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
-		initialView: "timeGrid",
-		titleFormat: { year: "numeric", month: "short", day: "numeric" },
+		initialView: "timeGridWeek",
+		titleFormat: { year: "numeric", month: "long" },
 		headerToolbar: {
-			left: "today",
-			center: "title",
-			right: "prev,next",
+			left: "title",
+			right: "today prev,next",
 		},
 		locale: localePt,
 		weekends: true,
-		editable: true,
+		editable: false,
 		selectable: true,
+		initialEvents: INITIAL_EVENTS,
 		selectMirror: true,
 		dayMaxEvents: true,
 		select: this.handleDateSelect.bind(this),
@@ -41,16 +47,28 @@ export class CalendarComponent {
 	};
 	currentEvents: EventApi[] = [];
 
-	constructor(private changeDetector: ChangeDetectorRef, public dialog: MatDialog) {}
+	constructor(
+		private changeDetector: ChangeDetectorRef,
+		private calendarService: CalendarService,
+		private dialog: MatDialog
+	) {}
 
-	openDialog(): void {
+	ngOnInit(): void {
+		if (this.isMobile()) {
+			this.calendarOptions["initialView"] = "timeGrid";
+			this.calendarOptions["headerToolbar"] = {
+				right: "prev,next",
+			};
+		}
+	}
+
+	openDialog(selectInfo: DateSelectArg): void {
 		const dialogRef = this.dialog.open(CreateEventComponent, {
-			data: { name: this.name, animal: this.animal },
+			data: this.services,
 		});
 
 		dialogRef.afterClosed().subscribe((result) => {
-			console.log("The dialog was closed", result);
-			this.animal = result;
+			this.calendarService.addEvent(selectInfo, result);
 		});
 	}
 
@@ -64,19 +82,7 @@ export class CalendarComponent {
 	}
 
 	handleDateSelect(selectInfo: DateSelectArg) {
-		this.openDialog();
-		// const title = prompt("Please enter a new title for your event");
-		// const calendarApi = selectInfo.view.calendar;
-		// calendarApi.unselect(); // clear date selection
-		// if (title) {
-		// 	calendarApi.addEvent({
-		// 		id: createEventId(),
-		// 		title,
-		// 		start: selectInfo.startStr,
-		// 		end: selectInfo.endStr,
-		// 		allDay: selectInfo.allDay,
-		// 	});
-		// }
+		this.openDialog(selectInfo);
 	}
 
 	handleEventClick(clickInfo: EventClickArg) {
@@ -89,4 +95,19 @@ export class CalendarComponent {
 		this.currentEvents = events;
 		this.changeDetector.detectChanges();
 	}
+
+	isMobile(): boolean {
+		const width =
+			window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+		return width <= this.BREAKPOINTS.md.max;
+	}
+
+	BREAKPOINTS = {
+		xs: { max: 425 },
+		sm: { min: 426, max: 576 },
+		md: { min: 577, max: 767 },
+		lg: { min: 768, max: 1024 },
+		xl: { min: 1025, max: 1440 },
+		xxl: { min: 1441 },
+	};
 }
