@@ -1,19 +1,15 @@
 <h1 mat-dialog-title>Marque seu horário</h1>
 <div mat-dialog-content>
     <mat-form-field appearance="fill" [formGroup]="form">
-        <mat-label>Serviço</mat-label>
-        <mat-select formControlName="name">
-            <mat-option value="option1">Sobrancelha</mat-option>
-            <mat-option value="option2"
-                >Cabelo e Barba (indisponível)</mat-option
-            >
-            <mat-option value="option3">Maquiagem</mat-option>
+        <mat-label>Escolha o serviço</mat-label>
+        <mat-select formControlName="service">
+            <mat-option *ngFor="let service of data" [value]="service">{{
+                service.title
+            }}</mat-option>
         </mat-select>
     </mat-form-field>
 </div>
 <div mat-dialog-actions>
     <button mat-button (click)="onNoClick()">Cancelar</button>
-    <button mat-button [mat-dialog-close]="data" (click)="save()">
-        Salvar
-    </button>
+    <button mat-button (click)="save()">Salvar</button>
 </div>

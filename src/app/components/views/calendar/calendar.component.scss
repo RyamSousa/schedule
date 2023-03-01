@@ -50,3 +50,7 @@ b {
 ::ng-deep .fc-toolbar-title {
     text-transform: capitalize;
 }
+
+::ng-deep .fc-event-main {
+    white-space: nowrap;
+}

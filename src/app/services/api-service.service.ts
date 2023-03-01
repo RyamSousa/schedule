@@ -1,30 +1,30 @@
 import { Injectable } from "@angular/core";
 import "../temporary-utils/services";
-import { Services } from "../temporary-utils/services";
+import { Service } from "../temporary-utils/services";
 
 const TODAY_STR = new Date().toISOString().replace(/T.*$/, ""); // YYYY-MM-DD of today
 
-const SERVICES: Services[] = [
+const SERVICES: Service[] = [
 	{
 		title: "Manicure",
 		value: 50,
-		duration: "01:00",
+		duration: 60,
 		start: TODAY_STR + "T07:00:00",
 		end: TODAY_STR + "T07:50:00",
 		backgroundColor: "#0066cc",
 	},
 	{
-		title: "Sobrancelha",
+		title: "Cabelo e Barba",
 		value: 12,
-		duration: "00:30",
-		start: TODAY_STR + "T08:00:00",
-		end: TODAY_STR + "T08:30:00",
+		duration: 30,
+		start: TODAY_STR + "T15:00:00",
+		end: TODAY_STR + "T15:30:00",
 		backgroundColor: "#ffc34d",
 	},
 	{
-		title: "Cabelo",
+		title: "Sobrancelha",
 		value: 20,
-		duration: "00:40",
+		duration: 40,
 		start: TODAY_STR + "T08:40:00",
 		end: TODAY_STR + "T09:20:00",
 		backgroundColor: "#ff3333",
@@ -35,7 +35,7 @@ const SERVICES: Services[] = [
 export class ApiService {
 	constructor() {}
 
-	getServices(): Services[] {
+	getServices(): Service[] {
 		return SERVICES;
 	}
 }

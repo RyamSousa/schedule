@@ -1,7 +1,7 @@
-export interface Services {
+export interface Service {
 	title: string;
 	value: number;
-	duration: string;
+	duration: number;
 	start: string;
 	end: string;
 	backgroundColor: string;

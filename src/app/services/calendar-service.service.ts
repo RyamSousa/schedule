@@ -1,29 +1,21 @@
 import { Injectable } from "@angular/core";
-import { DateSelectArg } from "@fullcalendar/core";
-import { Services } from "../temporary-utils/services";
+import { CalendarApi, DateSelectArg } from "@fullcalendar/core";
+import * as moment from "moment";
+import { Service } from "../temporary-utils/services";
 
 @Injectable({ providedIn: "platform" })
 export class CalendarService {
-	addEvent(selectInfo: DateSelectArg, data: Services) {
+	addEvent(selectInfo: DateSelectArg, service: any) {
+		let serviceFromDialog = service.service;
 		const calendarApi = selectInfo.view.calendar;
-
-		let result = this.canAddEvent(selectInfo);
-		console.log(result);
-
-		if (result) {
-			calendarApi.unselect();
-			calendarApi.addEvent({
-				id: "",
-				title: data.title,
-				start: selectInfo.startStr,
-				end: selectInfo.endStr,
-				allDay: selectInfo.allDay,
-			});
+		if (!this.validRangeEvent(selectInfo, calendarApi)) {
+			throw new ErrorEvent("Já existe um serviço marcado neste horário");
 		}
+
+		this.validEventData(selectInfo, serviceFromDialog, calendarApi);
 	}
 
-	canAddEvent(selectInfo: DateSelectArg): boolean {
-		const calendarApi = selectInfo.view.calendar;
+	validRangeEvent(selectInfo: DateSelectArg, calendarApi: CalendarApi): boolean {
 		let events = calendarApi.getEvents();
 		let allowed = true;
 
@@ -76,5 +68,22 @@ export class CalendarService {
 		});
 
 		return allowed;
+	}
+
+	validEventData(selectInfo: DateSelectArg, service: Service, calendarApi: CalendarApi) {
+		console.log(service);
+		console.log(selectInfo.start);
+		console.log(moment(selectInfo.start).add(service.duration, "m").toDate());
+
+		if (!!service) {
+			//calendarApi.unselect();
+			calendarApi.addEvent({
+				id: "",
+				title: service.title,
+				start: selectInfo.start,
+				end: moment(selectInfo.start).add(service.duration, "m").toDate(),
+				backgroundColor: service.backgroundColor,
+			});
+		}
 	}
 }

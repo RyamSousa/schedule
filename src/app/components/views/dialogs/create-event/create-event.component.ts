@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormBuilder, FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Services } from "src/app/temporary-utils/services";
+import { Service } from "src/app/temporary-utils/services";
 
 @Component({
 	selector: "app-create-event",
@@ -13,12 +13,12 @@ export class CreateEventComponent implements OnInit {
 
 	constructor(
 		private dialogRef: MatDialogRef<CreateEventComponent>,
-		@Inject(MAT_DIALOG_DATA) public data: Services
+		@Inject(MAT_DIALOG_DATA) public data: Service[]
 	) {}
 
 	ngOnInit(): void {
 		this.form = new FormGroup({
-			name: new FormControl("", Validators.required),
+			service: new FormControl({}, Validators.required),
 		});
 	}
 

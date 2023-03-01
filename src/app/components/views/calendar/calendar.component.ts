@@ -10,7 +10,7 @@ import { CreateEventComponent } from "../dialogs/create-event/create-event.compo
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
-import { Services } from "src/app/temporary-utils/services";
+import { Service } from "src/app/temporary-utils/services";
 
 @Component({
 	selector: "app-calendar",
@@ -18,7 +18,7 @@ import { Services } from "src/app/temporary-utils/services";
 	styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
-	services: Services | undefined;
+	services: Service[] = [];
 
 	calendarVisible = true;
 
@@ -41,6 +41,7 @@ export class CalendarComponent implements OnInit {
 		eventClick: this.handleEventClick.bind(this),
 		eventsSet: this.handleEvents.bind(this),
 		longPressDelay: 20,
+		contentHeight: "auto",
 	};
 	currentEvents: EventApi[] = [];
 
@@ -52,7 +53,8 @@ export class CalendarComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		this.calendarOptions["initialEvents"] = this.apiService.getServices();
+		this.services = this.apiService.getServices();
+		this.calendarOptions["initialEvents"] = this.services;
 		if (this.isMobile()) {
 			this.calendarOptions["initialView"] = "timeGrid";
 			this.calendarOptions["headerToolbar"] = {
@@ -66,8 +68,12 @@ export class CalendarComponent implements OnInit {
 			data: this.services,
 		});
 
-		dialogRef.afterClosed().subscribe((result) => {
-			this.calendarService.addEvent(selectInfo, result);
+		dialogRef.afterClosed().subscribe((service) => {
+			try {
+				this.calendarService.addEvent(selectInfo, service);
+			} catch (error) {
+				console.log(error);
+			}
 		});
 	}
 
