@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Service } from "src/app/temporary-utils/services";
+import { Service } from "src/app/temporary-utils/data";
 
 @Component({
 	selector: "app-create-event",

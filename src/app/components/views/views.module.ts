@@ -13,9 +13,11 @@ import { MatSelectModule } from "@angular/material/select";
 import { CalendarComponent } from "./calendar/calendar.component";
 import { FullCalendarModule } from "@fullcalendar/angular";
 import { DialogRef } from "@angular/cdk/dialog";
+import { ErrorEventComponent } from "./dialogs/error-event/error-event.component";
+import { CalendarService } from "src/app/services/calendar-service.service";
 
 @NgModule({
-	declarations: [CalendarComponent, CreateEventComponent],
+	declarations: [CalendarComponent, CreateEventComponent, ErrorEventComponent],
 	imports: [
 		CommonModule,
 		FullCalendarModule,
@@ -31,7 +33,7 @@ import { DialogRef } from "@angular/cdk/dialog";
 		MatOptionModule,
 		ReactiveFormsModule,
 	],
-	exports: [CreateEventComponent, CalendarComponent, MatDialogModule],
+	exports: [CreateEventComponent, CalendarComponent, MatDialogModule, ErrorEventComponent],
 	providers: [
 		{
 			provide: DialogRef,
@@ -41,6 +43,7 @@ import { DialogRef } from "@angular/cdk/dialog";
 			provide: MAT_DIALOG_DATA,
 			useValue: {},
 		},
+		CalendarService,
 	],
 })
 export class ViewsModule {}

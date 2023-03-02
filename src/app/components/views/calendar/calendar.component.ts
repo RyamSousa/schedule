@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, AfterViewInit } from "@angular/core";
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
 import dayGridPlugin from "@fullcalendar/daygrid";
@@ -10,7 +10,7 @@ import { CreateEventComponent } from "../dialogs/create-event/create-event.compo
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
-import { Service } from "src/app/temporary-utils/services";
+import { OfficeTime, Service } from "src/app/temporary-utils/data";
 
 @Component({
 	selector: "app-calendar",
@@ -19,17 +19,19 @@ import { Service } from "src/app/temporary-utils/services";
 })
 export class CalendarComponent implements OnInit {
 	services: Service[] = [];
+	officeTime: OfficeTime = { maxOfficeTime: "", minOfficeTime: "" };
 
 	calendarVisible = true;
 
 	calendarOptions: CalendarOptions = {
 		plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
 		initialView: "timeGridWeek",
-		titleFormat: { year: "numeric", month: "long" },
+		titleFormat: { year: "numeric", month: "long", day: "2-digit" },
 		headerToolbar: {
 			left: "title",
 			right: "today prev,next",
 		},
+		allDaySlot: false,
 		locale: localePt,
 		weekends: true,
 		editable: false,
@@ -40,7 +42,7 @@ export class CalendarComponent implements OnInit {
 		select: this.handleDateSelect.bind(this),
 		eventClick: this.handleEventClick.bind(this),
 		eventsSet: this.handleEvents.bind(this),
-		longPressDelay: 20,
+		longPressDelay: 10,
 		contentHeight: "auto",
 	};
 	currentEvents: EventApi[] = [];
@@ -54,6 +56,12 @@ export class CalendarComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.services = this.apiService.getServices();
+		this.officeTime = this.apiService.getOfficeTime();
+
+		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
+		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
+		this.calendarOptions["initialView"] = "timeGrid";
+
 		this.calendarOptions["initialEvents"] = this.services;
 		if (this.isMobile()) {
 			this.calendarOptions["initialView"] = "timeGrid";
@@ -69,11 +77,7 @@ export class CalendarComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe((service) => {
-			try {
-				this.calendarService.addEvent(selectInfo, service);
-			} catch (error) {
-				console.log(error);
-			}
+			this.calendarService.addEvent(selectInfo, service);
 		});
 	}
 
