@@ -1,0 +1,33 @@
+div {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
+
+
+
+    .client-informations {
+        display: flex;
+        flex-direction: column;
+
+        h1 {
+            width: 100%;
+            color: #000;
+            font-size: 1.2rem;
+        }
+
+        a {
+            text-decoration: none;
+        }
+    }
+
+    .service-informations {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+}

@@ -56,7 +56,10 @@
     </mat-sidenav>
     <mat-sidenav-content>
         <div class="content mat-elevation-z8">
-            <app-calendar></app-calendar>
+            <app-calendar
+                [optionalDialogCalendar]="openDialogCalendar"
+                [optionalDialogEvent]="openDialogEvent"
+            ></app-calendar>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

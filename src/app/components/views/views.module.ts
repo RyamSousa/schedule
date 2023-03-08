@@ -22,11 +22,15 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { MatDividerModule } from "@angular/material/divider";
+import { ViewEventDetailsComponent } from "./dialogs/view-event-details/view-event-details.component";
+import { PhonePipeModule } from "src/app/pipes/phone.pipe";
+import { NgxMaskModule } from "ngx-mask";
 
 @NgModule({
 	declarations: [
 		CalendarComponent,
 		CreateEventComponent,
+		ViewEventDetailsComponent,
 		ErrorEventComponent,
 		UserDetailsComponent,
 	],
@@ -53,6 +57,8 @@ import { MatDividerModule } from "@angular/material/divider";
 		MatButtonModule,
 		MatIconModule,
 		MatDividerModule,
+		PhonePipeModule,
+		NgxMaskModule.forRoot(),
 	],
 	exports: [CreateEventComponent, CalendarComponent, MatDialogModule, ErrorEventComponent],
 	providers: [

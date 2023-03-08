@@ -1,16 +1,22 @@
-import { ChangeDetectorRef, Component, OnInit, AfterViewInit } from "@angular/core";
+import {
+	ChangeDetectorRef,
+	Component,
+	OnInit,
+	AfterViewInit,
+	ComponentRef,
+	Input,
+} from "@angular/core";
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
-import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import listPlugin from "@fullcalendar/list";
 import localePt from "@fullcalendar/core/locales/pt";
 import { MatDialog } from "@angular/material/dialog";
 import { CreateEventComponent } from "../dialogs/create-event/create-event.component";
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
-import { OfficeTime, Service } from "src/app/temporary-utils/data";
+import { ClientEvent, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
+import { isMobile } from "src/app/configs/mobile-check";
 
 @Component({
 	selector: "app-calendar",
@@ -18,15 +24,16 @@ import { OfficeTime, Service } from "src/app/temporary-utils/data";
 	styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
+	events: ClientEvent[] = [];
 	services: Service[] = [];
 	officeTime: OfficeTime = { maxOfficeTime: "", minOfficeTime: "" };
-
-	calendarVisible = true;
+	@Input() optionalDialogCalendar!: Function;
+	@Input() optionalDialogEvent!: Function;
+	eventsCalendar: EventCalendar[] = [];
 
 	calendarOptions: CalendarOptions = {
-		timeZone: "UTC",
-		plugins: [timeGridPlugin],
-		initialView: "timeGridFourDay",
+		plugins: [interactionPlugin, timeGridPlugin],
+		initialView: "timeGridWeek",
 		titleFormat: { year: "numeric", month: "long", day: "2-digit" },
 		headerToolbar: {
 			left: "title",
@@ -62,15 +69,28 @@ export class CalendarComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
+		this.events = this.apiService.getEvents();
 		this.services = this.apiService.getServices();
 		this.officeTime = this.apiService.getOfficeTime();
+		this.events.forEach((e) =>
+			this.eventsCalendar.push({
+				title: e.service.title,
+				start: e.service.start,
+				end: e.service.end,
+				backgroundColor: e.service.backgroundColor,
+				extendedProps: {
+					client: e.client,
+					value: e.service.value,
+					duration: e.service.duration,
+				},
+			})
+		);
 
 		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
 		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
-		this.calendarOptions["initialView"] = "timeGridFourDay";
+		this.calendarOptions["initialEvents"] = this.eventsCalendar;
 
-		this.calendarOptions["initialEvents"] = this.services;
-		if (this.isMobile()) {
+		if (isMobile()) {
 			this.calendarOptions["initialView"] = "timeGridFourDay";
 			this.calendarOptions["headerToolbar"] = {
 				right: "prev,next",
@@ -79,17 +99,17 @@ export class CalendarComponent implements OnInit {
 	}
 
 	openDialog(selectInfo: DateSelectArg): void {
-		const dialogRef = this.dialog.open(CreateEventComponent, {
-			data: this.services,
-		});
+		if (!!this.optionalDialogCalendar) {
+			this.optionalDialogCalendar();
+		} else {
+			const dialogRef = this.dialog.open(CreateEventComponent, {
+				data: this.services,
+			});
 
-		dialogRef.afterClosed().subscribe((service) => {
-			this.calendarService.addEvent(selectInfo, service);
-		});
-	}
-
-	handleCalendarToggle() {
-		this.calendarVisible = !this.calendarVisible;
+			dialogRef.afterClosed().subscribe((formData) => {
+				this.calendarService.addEvent(selectInfo, formData);
+			});
+		}
 	}
 
 	handleWeekendsToggle() {
@@ -102,8 +122,12 @@ export class CalendarComponent implements OnInit {
 	}
 
 	handleEventClick(clickInfo: EventClickArg) {
-		if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
-			clickInfo.event.remove();
+		if (!!this.optionalDialogEvent) {
+			this.optionalDialogEvent(clickInfo);
+		} else {
+			if (confirm(`Are you sure you want to delete the event '${clickInfo.event.title}'`)) {
+				clickInfo.event.remove();
+			}
 		}
 	}
 
@@ -111,19 +135,4 @@ export class CalendarComponent implements OnInit {
 		this.currentEvents = events;
 		this.changeDetector.detectChanges();
 	}
-
-	isMobile(): boolean {
-		const width =
-			window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-		return width <= this.BREAKPOINTS.md.max;
-	}
-
-	BREAKPOINTS = {
-		xs: { max: 425 },
-		sm: { min: 426, max: 576 },
-		md: { min: 577, max: 767 },
-		lg: { min: 768, max: 1024 },
-		xl: { min: 1025, max: 1440 },
-		xxl: { min: 1441 },
-	};
 }

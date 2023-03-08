@@ -1,0 +1,19 @@
+<h1 mat-dialog-title>Detalhes do agendamento</h1>
+<div class="content" mat-dialog-content>
+    <div class="client-informations">
+        <h1>Cliente</h1>
+        <span>{{ client.name }}</span>
+        <a href="https://wa.me/{{ client.phone }}" target="_blank">{{
+            client.phone | PhonePipe
+        }}</a>
+    </div>
+    <div class="service-informations">
+        <h1>Serviço</h1>
+        <span>{{ service.title }}</span>
+        <span>{{ service.value }}</span>
+        <span>{{ service.duration }}</span>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Fechar</button>
+</div>

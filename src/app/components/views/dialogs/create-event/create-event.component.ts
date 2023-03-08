@@ -18,6 +18,8 @@ export class CreateEventComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.form = new FormGroup({
+			name: new FormControl("", [Validators.required, Validators.maxLength(50)]),
+			phone: new FormControl("", [Validators.required, Validators.maxLength(11)]),
 			service: new FormControl({}, Validators.required),
 		});
 	}

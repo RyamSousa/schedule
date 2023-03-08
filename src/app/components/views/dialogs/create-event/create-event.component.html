@@ -1,5 +1,18 @@
 <h1 mat-dialog-title>Marque seu horário</h1>
-<div mat-dialog-content>
+<div mat-dialog-content class="form">
+    <mat-form-field appearance="fill" [formGroup]="form">
+        <mat-label>Nome do cliente</mat-label>
+        <input matInput formControlName="name" type="text" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" [formGroup]="form"
+        ><mat-label>Número para contato</mat-label>
+        <input
+            matInput
+            type="tel"
+            mask="(00) 00000-0000"
+            formControlName="phone"
+        />
+    </mat-form-field>
     <mat-form-field appearance="fill" [formGroup]="form">
         <mat-label>Escolha o serviço</mat-label>
         <mat-select formControlName="service">
