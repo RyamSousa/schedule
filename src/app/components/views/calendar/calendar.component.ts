@@ -24,12 +24,19 @@ export class CalendarComponent implements OnInit {
 	calendarVisible = true;
 
 	calendarOptions: CalendarOptions = {
-		plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
-		initialView: "timeGridWeek",
+		timeZone: "UTC",
+		plugins: [timeGridPlugin],
+		initialView: "timeGridFourDay",
 		titleFormat: { year: "numeric", month: "long", day: "2-digit" },
 		headerToolbar: {
 			left: "title",
 			right: "today prev,next",
+		},
+		views: {
+			timeGridFourDay: {
+				type: "timeGrid",
+				duration: { days: 4 },
+			},
 		},
 		allDaySlot: false,
 		locale: localePt,
@@ -60,11 +67,11 @@ export class CalendarComponent implements OnInit {
 
 		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
 		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
-		this.calendarOptions["initialView"] = "timeGrid";
+		this.calendarOptions["initialView"] = "timeGridFourDay";
 
 		this.calendarOptions["initialEvents"] = this.services;
 		if (this.isMobile()) {
-			this.calendarOptions["initialView"] = "timeGrid";
+			this.calendarOptions["initialView"] = "timeGridFourDay";
 			this.calendarOptions["headerToolbar"] = {
 				right: "prev,next",
 			};

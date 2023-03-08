@@ -1,0 +1,62 @@
+<!-- <mat-drawer-container class="container" autosize>
+    <mat-drawer #drawer class="sidenav" mode="side" opened="">
+        <div class="user-profile">
+            <img src="favicon.ico" alt="" />
+            <h1 class="username">User Name</h1>
+            <button *ngIf="isMobile">oi</button>
+        </div>
+        <div class="user-informations">
+            <p>Informações</p>
+            <a href="https://wa.me/5584999182049" target="_blank">whats</a>
+        </div>
+    </mat-drawer>
+</mat-drawer-container> -->
+<mat-toolbar class="mat-elevation-z8">
+    <button
+        mat-icon-button
+        *ngIf="sidenav.mode === 'over'"
+        (click)="sidenav.toggle()"
+    >
+        <mat-icon *ngIf="!sidenav.opened"> menu </mat-icon>
+        <mat-icon *ngIf="sidenav.opened"> close </mat-icon>
+    </button>
+    Responsive side navigation
+</mat-toolbar>
+<mat-sidenav-container>
+    <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
+        <img
+            class="avatar mat-elevation-z8"
+            src="https://source.unsplash.com/c_GmwfHBDzk/200x200"
+        />
+
+        <h4 class="name">John Smith</h4>
+        <p class="designation">Software Engineer</p>
+
+        <mat-divider></mat-divider>
+
+        <button mat-button color="primary" class="menu-button">
+            <mat-icon>home</mat-icon>
+            <span>Home</span>
+        </button>
+        <button mat-button color="primary" class="menu-button">
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+        </button>
+        <button mat-button color="primary" class="menu-button">
+            <mat-icon>info</mat-icon>
+            <span>About</span>
+        </button>
+
+        <mat-divider></mat-divider>
+
+        <button mat-button color="primary" class="menu-button">
+            <mat-icon>help</mat-icon>
+            <span>Help</span>
+        </button>
+    </mat-sidenav>
+    <mat-sidenav-content>
+        <div class="content mat-elevation-z8">
+            <app-calendar></app-calendar>
+        </div>
+    </mat-sidenav-content>
+</mat-sidenav-container>

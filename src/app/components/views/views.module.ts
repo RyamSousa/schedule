@@ -15,9 +15,21 @@ import { FullCalendarModule } from "@fullcalendar/angular";
 import { DialogRef } from "@angular/cdk/dialog";
 import { ErrorEventComponent } from "./dialogs/error-event/error-event.component";
 import { CalendarService } from "src/app/services/calendar-service.service";
+import { UserDetailsComponent } from "./user-details/user-details.component";
+import { CalendarRoutingModule } from "./calendar/calendar-routing.module";
+import { UserDetailsRoutingModule } from "./user-details/user-details-routing.module";
+import { MatSidenavModule } from "@angular/material/sidenav";
+
+import { MatToolbarModule } from "@angular/material/toolbar";
+import { MatDividerModule } from "@angular/material/divider";
 
 @NgModule({
-	declarations: [CalendarComponent, CreateEventComponent, ErrorEventComponent],
+	declarations: [
+		CalendarComponent,
+		CreateEventComponent,
+		ErrorEventComponent,
+		UserDetailsComponent,
+	],
 	imports: [
 		CommonModule,
 		FullCalendarModule,
@@ -32,6 +44,15 @@ import { CalendarService } from "src/app/services/calendar-service.service";
 		MatSelectModule,
 		MatOptionModule,
 		ReactiveFormsModule,
+		CalendarRoutingModule,
+		UserDetailsRoutingModule,
+		MatSidenavModule,
+
+		MatToolbarModule,
+		MatSidenavModule,
+		MatButtonModule,
+		MatIconModule,
+		MatDividerModule,
 	],
 	exports: [CreateEventComponent, CalendarComponent, MatDialogModule, ErrorEventComponent],
 	providers: [
