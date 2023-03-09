@@ -8,6 +8,7 @@ import { RouterModule } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { CalendarModule } from "../calendar/calendar.module";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatButtonModule } from "@angular/material/button";
 
 @NgModule({
 	declarations: [UserDetailsComponent],
@@ -19,6 +20,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 		MatToolbarModule,
 		MatSidenavModule,
 		MatIconModule,
+		MatButtonModule,
 		MatFormFieldModule,
 	],
 	exports: [UserDetailsComponent],

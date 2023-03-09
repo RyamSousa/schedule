@@ -21,9 +21,23 @@
 
         <mat-divider></mat-divider>
 
-        <button mat-button color="primary" class="menu-button">
+        <button
+            mat-button
+            color="primary"
+            class="menu-button"
+            (click)="navigate('services')"
+        >
             <mat-icon>create</mat-icon>
             <span>Serviços</span>
+        </button>
+        <button
+            mat-button
+            color="primary"
+            class="menu-button"
+            (click)="navigate('schedule')"
+        >
+            <mat-icon>edit_calendar</mat-icon>
+            <span>Agendamentos</span>
         </button>
 
         <mat-divider></mat-divider>
@@ -36,6 +50,7 @@
     <mat-sidenav-content>
         <div class="content mat-elevation-z8">
             <app-calendar
+                *ngIf="openPageSchedules"
                 [optionalDialogCalendar]="openDialogCalendar"
                 [optionalDialogEvent]="openDialogEvent"
             ></app-calendar>

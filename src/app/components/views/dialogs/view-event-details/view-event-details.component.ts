@@ -17,8 +17,6 @@ export class ViewEventDetailsComponent implements OnInit {
 	) {}
 
 	ngOnInit(): void {
-		console.log(this.eventData);
-
 		this.client = this.eventData.extendedProps.client;
 		this.service = {
 			title: this.eventData.title,
@@ -28,11 +26,16 @@ export class ViewEventDetailsComponent implements OnInit {
 			start: this.eventData._instance.range.start,
 			end: this.eventData._instance.range.end,
 		};
-
-		console.log(this.client, this.service);
 	}
 
 	onNoClick(): void {
+		this.dialogRef.close();
+	}
+
+	cancelSchedule() {
+		// open dialog notify client
+		// delete event
+
 		this.dialogRef.close();
 	}
 }

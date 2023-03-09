@@ -84,6 +84,7 @@ export class CalendarComponent implements OnInit {
 		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
 		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
 		this.calendarOptions["initialEvents"] = this.eventsCalendar;
+		this.calendarOptions["selectable"] = false;
 
 		if (isMobile()) {
 			this.calendarOptions["initialView"] = "timeGridFourDay";

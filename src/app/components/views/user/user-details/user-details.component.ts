@@ -17,6 +17,9 @@ export class UserDetailsComponent implements OnInit {
 	sidenav!: MatSidenav;
 	services: Service[] = [];
 
+	openPageService: boolean = false;
+	openPageSchedules: boolean = true;
+
 	constructor(
 		private observer: BreakpointObserver,
 		private dialog: MatDialog,
@@ -44,10 +47,19 @@ export class UserDetailsComponent implements OnInit {
 	}
 
 	openDialogEvent(clickInfo: any): void {
-		console.log(clickInfo.event);
-
 		const dialogRef = this.dialog.open(ViewEventDetailsComponent, {
 			data: clickInfo.event,
 		});
+	}
+
+	navigate(page: string) {
+		if (page === "schedule") {
+			this.openPageSchedules = true;
+			this.openPageService = false;
+		}
+		if (page === "services") {
+			this.openPageSchedules = false;
+			this.openPageService = true;
+		}
 	}
 }
