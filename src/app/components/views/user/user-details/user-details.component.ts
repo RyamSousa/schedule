@@ -2,11 +2,10 @@ import { Component, ViewChild, OnInit } from "@angular/core";
 import { MatSidenav } from "@angular/material/sidenav";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { MatDialog } from "@angular/material/dialog";
-import { ErrorEventComponent } from "../dialogs/error-event/error-event.component";
-import { ViewEventDetailsComponent } from "../dialogs/view-event-details/view-event-details.component";
-import { EventCalendar, Service } from "src/app/temporary-utils/data";
+import { ErrorEventComponent } from "../../dialogs/error-event/error-event.component";
+import { ViewEventDetailsComponent } from "../../dialogs/view-event-details/view-event-details.component";
+import { Service } from "src/app/temporary-utils/data";
 import { ApiService } from "src/app/services/api-service.service";
-import { EventClickArg } from "@fullcalendar/core";
 
 @Component({
 	selector: "app-user-details",
@@ -28,18 +27,6 @@ export class UserDetailsComponent implements OnInit {
 		this.apiService.getServices();
 	}
 
-	openDialogCalendar(): void {
-		const dialogRef = this.dialog.open(ErrorEventComponent);
-	}
-
-	openDialogEvent(clickInfo: any): void {
-		console.log(clickInfo.event);
-
-		const dialogRef = this.dialog.open(ViewEventDetailsComponent, {
-			data: clickInfo.event,
-		});
-	}
-
 	ngAfterViewInit() {
 		this.observer.observe(["(max-width: 800px)"]).subscribe((res) => {
 			if (res.matches) {
@@ -49,6 +36,18 @@ export class UserDetailsComponent implements OnInit {
 				this.sidenav.mode = "side";
 				this.sidenav.open();
 			}
+		});
+	}
+
+	openDialogCalendar(): void {
+		const dialogRef = this.dialog.open(ErrorEventComponent);
+	}
+
+	openDialogEvent(clickInfo: any): void {
+		console.log(clickInfo.event);
+
+		const dialogRef = this.dialog.open(ViewEventDetailsComponent, {
+			data: clickInfo.event,
 		});
 	}
 }

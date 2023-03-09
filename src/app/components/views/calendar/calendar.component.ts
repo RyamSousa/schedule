@@ -1,11 +1,4 @@
-import {
-	ChangeDetectorRef,
-	Component,
-	OnInit,
-	AfterViewInit,
-	ComponentRef,
-	Input,
-} from "@angular/core";
+import { ChangeDetectorRef, Component, OnInit, Input, ViewChild } from "@angular/core";
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from "@fullcalendar/core";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
@@ -17,6 +10,7 @@ import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
 import { ClientEvent, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
 import { isMobile } from "src/app/configs/mobile-check";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-calendar",
@@ -24,11 +18,12 @@ import { isMobile } from "src/app/configs/mobile-check";
 	styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
+	@Input() optionalDialogCalendar!: Function;
+	@Input() optionalDialogEvent!: Function;
+
 	events: ClientEvent[] = [];
 	services: Service[] = [];
 	officeTime: OfficeTime = { maxOfficeTime: "", minOfficeTime: "" };
-	@Input() optionalDialogCalendar!: Function;
-	@Input() optionalDialogEvent!: Function;
 	eventsCalendar: EventCalendar[] = [];
 
 	calendarOptions: CalendarOptions = {

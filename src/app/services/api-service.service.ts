@@ -104,20 +104,6 @@ const CLIENT_EVENT: ClientEvent[] = [
 			backgroundColor: "#ffc34d",
 		},
 	},
-	{
-		client: {
-			name: "nome de algumem",
-			phone: "84848484847",
-		},
-		service: {
-			title: "Sobrancelha",
-			duration: 30,
-			value: 50,
-			start: "2023-03-08T08:00:00",
-			end: "2023-03-08T08:30:00",
-			backgroundColor: "#ffc34d",
-		},
-	},
 ];
 
 @Injectable({ providedIn: "platform" })
