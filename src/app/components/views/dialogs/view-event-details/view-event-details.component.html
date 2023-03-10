@@ -9,14 +9,14 @@
     </div>
     <div class="service-informations">
         <h1>Serviço</h1>
-        <span>{{ service.title }}</span>
+        <span>{{ service.name }}</span>
         <span>{{ service.value }}</span>
         <span>{{ service.duration }}</span>
     </div>
 </div>
 <div mat-dialog-actions>
     <button mat-raised-button (click)="onNoClick()">Fechar</button>
-    <button mat-raised-button color="primary" (click)="onNoClick()">
+    <button mat-raised-button color="primary" (click)="cancelSchedule()">
         Cancelar agendamento
     </button>
 </div>

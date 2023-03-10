@@ -25,7 +25,8 @@
             mat-button
             color="primary"
             class="menu-button"
-            (click)="navigate('services')"
+            [routerLink]="'services'"
+            (click)="navigate('')"
         >
             <mat-icon>create</mat-icon>
             <span>Serviços</span>
@@ -34,7 +35,7 @@
             mat-button
             color="primary"
             class="menu-button"
-            (click)="navigate('schedule')"
+            (click)="navigate('user')"
         >
             <mat-icon>edit_calendar</mat-icon>
             <span>Agendamentos</span>
@@ -50,10 +51,15 @@
     <mat-sidenav-content>
         <div class="content mat-elevation-z8">
             <app-calendar
-                *ngIf="openPageSchedules"
-                [optionalDialogCalendar]="openDialogCalendar"
+                *ngIf="!openPageService"
                 [optionalDialogEvent]="openDialogEvent"
             ></app-calendar>
+            <app-user-services
+                *ngIf="!isMobile() && openPageService"
+            ></app-user-services>
         </div>
+        <app-user-services
+            *ngIf="isMobile() && openPageService"
+        ></app-user-services>
     </mat-sidenav-content>
 </mat-sidenav-container>

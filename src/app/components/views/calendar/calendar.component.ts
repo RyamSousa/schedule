@@ -10,7 +10,6 @@ import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
 import { ClientEvent, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
 import { isMobile } from "src/app/configs/mobile-check";
-import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-calendar",
@@ -18,7 +17,6 @@ import { Router } from "@angular/router";
 	styleUrls: ["./calendar.component.scss"],
 })
 export class CalendarComponent implements OnInit {
-	@Input() optionalDialogCalendar!: Function;
 	@Input() optionalDialogEvent!: Function;
 
 	events: ClientEvent[] = [];
@@ -69,7 +67,7 @@ export class CalendarComponent implements OnInit {
 		this.officeTime = this.apiService.getOfficeTime();
 		this.events.forEach((e) =>
 			this.eventsCalendar.push({
-				title: e.service.title,
+				title: e.service.name,
 				start: e.service.start,
 				end: e.service.end,
 				backgroundColor: e.service.backgroundColor,
@@ -92,20 +90,17 @@ export class CalendarComponent implements OnInit {
 				right: "prev,next",
 			};
 		}
+		console.log(this.calendarOptions["initialView"]);
 	}
 
 	openDialog(selectInfo: DateSelectArg): void {
-		if (!!this.optionalDialogCalendar) {
-			this.optionalDialogCalendar();
-		} else {
-			const dialogRef = this.dialog.open(CreateEventComponent, {
-				data: this.services,
-			});
+		const dialogRef = this.dialog.open(CreateEventComponent, {
+			data: this.services,
+		});
 
-			dialogRef.afterClosed().subscribe((formData) => {
-				this.calendarService.addEvent(selectInfo, formData);
-			});
-		}
+		dialogRef.afterClosed().subscribe((formData) => {
+			this.calendarService.addEvent(selectInfo, formData);
+		});
 	}
 
 	handleWeekendsToggle() {

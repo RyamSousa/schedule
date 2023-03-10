@@ -1,7 +1,7 @@
 export interface Service {
-	title: string;
+	name: string;
 	value: number;
-	duration: number;
+	duration: string;
 	start: string;
 	end: string;
 	backgroundColor: string;
@@ -40,6 +40,6 @@ export interface EventCalendar {
 	extendedProps: {
 		value: number;
 		client: ClientData;
-		duration: number;
+		duration: string;
 	};
 }

@@ -2,10 +2,10 @@ import { Component, ViewChild, OnInit } from "@angular/core";
 import { MatSidenav } from "@angular/material/sidenav";
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { MatDialog } from "@angular/material/dialog";
-import { ErrorEventComponent } from "../../dialogs/error-event/error-event.component";
 import { ViewEventDetailsComponent } from "../../dialogs/view-event-details/view-event-details.component";
 import { Service } from "src/app/temporary-utils/data";
 import { ApiService } from "src/app/services/api-service.service";
+import { isMobile } from "src/app/configs/mobile-check";
 
 @Component({
 	selector: "app-user-details",
@@ -18,7 +18,6 @@ export class UserDetailsComponent implements OnInit {
 	services: Service[] = [];
 
 	openPageService: boolean = false;
-	openPageSchedules: boolean = true;
 
 	constructor(
 		private observer: BreakpointObserver,
@@ -31,19 +30,17 @@ export class UserDetailsComponent implements OnInit {
 	}
 
 	ngAfterViewInit() {
-		this.observer.observe(["(max-width: 800px)"]).subscribe((res) => {
-			if (res.matches) {
-				this.sidenav.mode = "over";
-				this.sidenav.close();
-			} else {
-				this.sidenav.mode = "side";
-				this.sidenav.open();
-			}
-		});
-	}
-
-	openDialogCalendar(): void {
-		const dialogRef = this.dialog.open(ErrorEventComponent);
+		setTimeout(() => {
+			this.observer.observe(["(max-width: 800px)"]).subscribe((res) => {
+				if (res.matches) {
+					this.sidenav.mode = "over";
+					this.sidenav.close();
+				} else {
+					this.sidenav.mode = "side";
+					this.sidenav.open();
+				}
+			});
+		}, 1);
 	}
 
 	openDialogEvent(clickInfo: any): void {
@@ -53,13 +50,14 @@ export class UserDetailsComponent implements OnInit {
 	}
 
 	navigate(page: string) {
-		if (page === "schedule") {
-			this.openPageSchedules = true;
-			this.openPageService = false;
-		}
-		if (page === "services") {
-			this.openPageSchedules = false;
+		if (page === "") {
 			this.openPageService = true;
+		} else {
+			window.location.pathname = page;
 		}
+	}
+
+	isMobile() {
+		return isMobile();
 	}
 }

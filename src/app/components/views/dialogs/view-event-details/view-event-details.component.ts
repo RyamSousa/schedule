@@ -19,7 +19,7 @@ export class ViewEventDetailsComponent implements OnInit {
 	ngOnInit(): void {
 		this.client = this.eventData.extendedProps.client;
 		this.service = {
-			title: this.eventData.title,
+			name: this.eventData.name,
 			backgroundColor: this.eventData.backgroundColor,
 			duration: this.eventData.extendedProps.duration,
 			value: this.eventData.extendedProps.value,

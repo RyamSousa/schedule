@@ -1,16 +1,16 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { CalendarComponent } from "../calendar/calendar.component";
-import { UserDetailsComponent } from "./user-details/user-details.component";
+import { UserServicesComponent } from "./user-services/user-services.component";
 
 const routes: Routes = [
 	{
 		path: "",
-		component: UserDetailsComponent,
+		redirectTo: "schedules",
+		pathMatch: "full",
 	},
 	{
-		path: "user-informations",
-		component: CalendarComponent,
+		path: "services",
+		component: UserServicesComponent,
 	},
 ];
 

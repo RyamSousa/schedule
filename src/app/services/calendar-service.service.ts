@@ -24,11 +24,11 @@ export class CalendarService {
 				return;
 			}
 
-			if (!!formdata.service && !!serviceFromDialog.title) {
+			if (!!formdata.service && !!serviceFromDialog.name) {
 				calendarApi.unselect();
 				calendarApi.addEvent({
 					id: "",
-					title: serviceFromDialog.title,
+					title: serviceFromDialog.name,
 					start: selectInfo.start,
 					end: moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate(),
 					backgroundColor: serviceFromDialog.backgroundColor,

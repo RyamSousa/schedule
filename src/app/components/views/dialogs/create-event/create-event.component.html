@@ -17,7 +17,7 @@
         <mat-label>Escolha o serviço</mat-label>
         <mat-select formControlName="service">
             <mat-option *ngFor="let service of data" [value]="service">{{
-                service.title
+                service.name
             }}</mat-option>
         </mat-select>
     </mat-form-field>

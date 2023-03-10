@@ -9,9 +9,12 @@ import { MatIconModule } from "@angular/material/icon";
 import { CalendarModule } from "../calendar/calendar.module";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatButtonModule } from "@angular/material/button";
+import { UserServicesComponent } from "./user-services/user-services.component";
+import { MatTableModule } from "@angular/material/table";
+import { MatCheckboxModule } from "@angular/material/checkbox";
 
 @NgModule({
-	declarations: [UserDetailsComponent],
+	declarations: [UserDetailsComponent, UserServicesComponent],
 	imports: [
 		CommonModule,
 		RouterModule,
@@ -22,6 +25,8 @@ import { MatButtonModule } from "@angular/material/button";
 		MatIconModule,
 		MatButtonModule,
 		MatFormFieldModule,
+		MatTableModule,
+		MatCheckboxModule,
 	],
 	exports: [UserDetailsComponent],
 })
