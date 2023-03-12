@@ -9,7 +9,7 @@ import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
 import { ClientEvent, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
-import { isMobile } from "src/app/configs/mobile-check";
+import { isMobile } from "src/app/temporary-utils/functions";
 
 @Component({
 	selector: "app-calendar",
@@ -18,6 +18,7 @@ import { isMobile } from "src/app/configs/mobile-check";
 })
 export class CalendarComponent implements OnInit {
 	@Input() optionalDialogEvent!: Function;
+	@Input() selectable!: boolean;
 
 	events: ClientEvent[] = [];
 	services: Service[] = [];
@@ -79,18 +80,7 @@ export class CalendarComponent implements OnInit {
 			})
 		);
 
-		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
-		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
-		this.calendarOptions["initialEvents"] = this.eventsCalendar;
-		this.calendarOptions["selectable"] = false;
-
-		if (isMobile()) {
-			this.calendarOptions["initialView"] = "timeGridFourDay";
-			this.calendarOptions["headerToolbar"] = {
-				right: "prev,next",
-			};
-		}
-		console.log(this.calendarOptions["initialView"]);
+		this.setCalendarOptions();
 	}
 
 	openDialog(selectInfo: DateSelectArg): void {
@@ -125,5 +115,25 @@ export class CalendarComponent implements OnInit {
 	handleEvents(events: EventApi[]) {
 		this.currentEvents = events;
 		this.changeDetector.detectChanges();
+	}
+
+	setCalendarOptions() {
+		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
+		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
+		this.calendarOptions["initialEvents"] = this.eventsCalendar;
+
+		if (this.selectable === undefined) {
+			this.selectable = true;
+		}
+
+		this.calendarOptions["selectable"] = this.selectable;
+
+		if (isMobile()) {
+			this.calendarOptions["initialView"] = "timeGridFourDay";
+			this.calendarOptions["headerToolbar"] = {
+				right: "prev,next",
+			};
+		}
+		console.log(this.calendarOptions["initialView"]);
 	}
 }

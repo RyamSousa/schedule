@@ -13,9 +13,16 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { ErrorEventComponent } from "./error-event/error-event.component";
 import { ViewEventDetailsComponent } from "./view-event-details/view-event-details.component";
+import { CreateServiceComponent } from "./create-service/create-service.component";
+import { CurrencyMaskModule } from "ng2-currency-mask";
 
 @NgModule({
-	declarations: [CreateEventComponent, ErrorEventComponent, ViewEventDetailsComponent],
+	declarations: [
+		CreateEventComponent,
+		ErrorEventComponent,
+		ViewEventDetailsComponent,
+		CreateServiceComponent,
+	],
 	imports: [
 		CommonModule,
 		ReactiveFormsModule,
@@ -25,6 +32,7 @@ import { ViewEventDetailsComponent } from "./view-event-details/view-event-detai
 		MatInputModule,
 		MatSelectModule,
 		MatOptionModule,
+		CurrencyMaskModule,
 		NgxMaskModule.forRoot(),
 	],
 	providers: [

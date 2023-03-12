@@ -53,6 +53,7 @@
             <app-calendar
                 *ngIf="!openPageService"
                 [optionalDialogEvent]="openDialogEvent"
+                [selectable]="selectable"
             ></app-calendar>
             <app-user-services
                 *ngIf="!isMobile() && openPageService"

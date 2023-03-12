@@ -1,0 +1,32 @@
+<h1 mat-dialog-title>Marque seu horário</h1>
+<div mat-dialog-content class="form">
+    <mat-form-field appearance="fill" [formGroup]="form">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="name" type="text" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" [formGroup]="form"
+        ><mat-label>Valor</mat-label>
+        <input
+            matInput
+            formControlName="value"
+            currencyMask
+            allowNegative="false"
+            decimal=","
+            precision="2"
+            prefix="R$ "
+            thousands="."
+        />
+    </mat-form-field>
+    <mat-form-field appearance="fill" [formGroup]="form"
+        ><mat-label>Duração</mat-label>
+        <input matInput formControlName="duration" mask="00:00:00" />
+    </mat-form-field>
+    <mat-form-field appearance="fill" [formGroup]="form">
+        <mat-label>Cor</mat-label>
+        <input matInput formControlName="backgroundColor" />
+    </mat-form-field>
+</div>
+<div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="save()">Salvar</button>
+</div>

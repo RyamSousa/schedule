@@ -5,7 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { ViewEventDetailsComponent } from "../../dialogs/view-event-details/view-event-details.component";
 import { Service } from "src/app/temporary-utils/data";
 import { ApiService } from "src/app/services/api-service.service";
-import { isMobile } from "src/app/configs/mobile-check";
+import { isMobile } from "src/app/temporary-utils/functions";
 
 @Component({
 	selector: "app-user-details",
@@ -18,6 +18,7 @@ export class UserDetailsComponent implements OnInit {
 	services: Service[] = [];
 
 	openPageService: boolean = false;
+	selectable: boolean = false;
 
 	constructor(
 		private observer: BreakpointObserver,

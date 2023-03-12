@@ -9,7 +9,7 @@ import { ViewsRoutingModule } from "./views-routing.module";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { RouterModule } from "@angular/router";
 import { MatSidenavModule } from "@angular/material/sidenav";
-import { UserDetailsModule } from "./user/user.module";
+import { UserModule } from "./user/user.module";
 
 @NgModule({
 	imports: [
@@ -17,7 +17,7 @@ import { UserDetailsModule } from "./user/user.module";
 		CalendarModule,
 		RouterModule,
 		ViewsRoutingModule,
-		UserDetailsModule,
+		UserModule,
 		ReactiveFormsModule,
 		MatFormFieldModule,
 		MatOptionModule,

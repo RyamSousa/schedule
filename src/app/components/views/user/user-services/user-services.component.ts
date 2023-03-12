@@ -1,8 +1,10 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
-import { isMobile } from "src/app/configs/mobile-check";
+import { isMobile } from "src/app/temporary-utils/functions";
 import { Service } from "src/app/temporary-utils/data";
+import { MatDialog } from "@angular/material/dialog";
+import { CreateServiceComponent } from "../../dialogs/create-service/create-service.component";
 
 const TODAY_STR = new Date().toISOString().replace(/T.*$/, ""); // YYYY-MM-DD of today
 
@@ -36,6 +38,7 @@ export class UserServicesComponent implements OnInit {
 	dataSource = new MatTableDataSource<{}>();
 	selection = new SelectionModel<{}>(true, []);
 
+	constructor(private dialog: MatDialog) {}
 	ngOnInit(): void {
 		this.dataSource = new MatTableDataSource<{}>(ELEMENT_DATA);
 	}
@@ -67,6 +70,12 @@ export class UserServicesComponent implements OnInit {
 	}
 
 	clickedRow(row: any, event?: any) {
-		console.log(row);
+		this.openDialogCreateService();
+	}
+
+	openDialogCreateService(clickInfo?: any): void {
+		const dialogRef = this.dialog.open(CreateServiceComponent, {
+			data: clickInfo?.event,
+		});
 	}
 }

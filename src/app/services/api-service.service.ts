@@ -7,7 +7,7 @@ const TODAY_STR = new Date().toISOString().replace(/T.*$/, ""); // YYYY-MM-DD of
 const SERVICES: Service[] = [
 	{
 		name: "Manicure",
-		duration: "T00:50:00",
+		duration: 50,
 		value: 50,
 		start: TODAY_STR + "T07:00:00",
 		end: TODAY_STR + "T07:50:00",
@@ -15,7 +15,7 @@ const SERVICES: Service[] = [
 	},
 	{
 		name: "Sobrancelha",
-		duration: "T00:30:00",
+		duration: 30,
 		value: 50,
 		start: TODAY_STR + "T08:00:00",
 		end: TODAY_STR + "T08:30:00",
@@ -23,7 +23,7 @@ const SERVICES: Service[] = [
 	},
 	{
 		name: "Corte de Cabelo",
-		duration: "T00:40:00",
+		duration: 40,
 		value: 50,
 		start: TODAY_STR + "T08:40:00",
 		end: TODAY_STR + "T09:20:00",
@@ -31,7 +31,7 @@ const SERVICES: Service[] = [
 	},
 	{
 		name: "Alisamento progressivo",
-		duration: "T00:50:00",
+		duration: 50,
 		value: 50,
 		start: TODAY_STR + "T10:00:00",
 		end: TODAY_STR + "T10:50:00",
@@ -55,7 +55,7 @@ const CLIENT_EVENT: ClientEvent[] = [
 		},
 		service: {
 			name: "Alisamento progressivo",
-			duration: "T00:50:00",
+			duration: 50,
 			value: 50,
 			start: TODAY_STR + "T09:20:00",
 			end: TODAY_STR + "T10:10:00",
@@ -69,7 +69,7 @@ const CLIENT_EVENT: ClientEvent[] = [
 		},
 		service: {
 			name: "Corte de Cabelo",
-			duration: "T00:40:00",
+			duration: 40,
 			value: 50,
 			start: TODAY_STR + "T08:40:00",
 			end: TODAY_STR + "T09:20:00",
@@ -83,7 +83,7 @@ const CLIENT_EVENT: ClientEvent[] = [
 		},
 		service: {
 			name: "Manicure",
-			duration: "T00:50:00",
+			duration: 50,
 			value: 50,
 			start: TODAY_STR + "T07:00:00",
 			end: TODAY_STR + "T07:50:00",
@@ -97,7 +97,7 @@ const CLIENT_EVENT: ClientEvent[] = [
 		},
 		service: {
 			name: "Sobrancelha",
-			duration: "T00:30:00",
+			duration: 30,
 			value: 50,
 			start: TODAY_STR + "T08:00:00",
 			end: TODAY_STR + "T08:30:00",
@@ -134,8 +134,6 @@ export class ApiService {
 	addService(service: Service) {
 		this.services.push(service);
 	}
-
-	addSchedule() {}
 
 	getOfficeTime() {
 		return this.officeTime;

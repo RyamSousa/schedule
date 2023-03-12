@@ -5,6 +5,11 @@ import { CalendarComponent } from "./components/views/calendar/calendar.componen
 const routes: Routes = [
 	{
 		path: "",
+		redirectTo: "schedule",
+		pathMatch: "full",
+	},
+	{
+		path: "schedule",
 		component: CalendarComponent,
 	},
 ];

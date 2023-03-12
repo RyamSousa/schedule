@@ -12,3 +12,8 @@ export function isMobile() {
 		window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
 	return width <= BREAKPOINTS.md.max;
 }
+
+export function formatDate(date: Date): String {
+	return `${date.getDate()}/${date.getMonth()}/${date.getFullYear()}
+    T${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
