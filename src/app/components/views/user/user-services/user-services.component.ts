@@ -3,29 +3,9 @@ import { Component, OnInit } from "@angular/core";
 import { MatTableDataSource } from "@angular/material/table";
 import { isMobile } from "src/app/temporary-utils/functions";
 import { Service } from "src/app/temporary-utils/data";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { CreateServiceComponent } from "../../dialogs/create-service/create-service.component";
-
-const TODAY_STR = new Date().toISOString().replace(/T.*$/, ""); // YYYY-MM-DD of today
-
-const ELEMENT_DATA = [
-	{
-		name: "Alisamento progressivo",
-		duration: 50,
-		value: 50,
-		start: TODAY_STR + "T10:00:00",
-		end: TODAY_STR + "T10:50:00",
-		backgroundColor: "#ff8000",
-	},
-	{
-		name: "Manicure",
-		duration: 30,
-		value: 50,
-		start: TODAY_STR + "T07:00:00",
-		end: TODAY_STR + "T07:50:00",
-		backgroundColor: "#0066cc",
-	},
-];
+import { ApiService } from "src/app/services/api-service.service";
 
 @Component({
 	selector: "app-user-services",
@@ -33,14 +13,14 @@ const ELEMENT_DATA = [
 	styleUrls: ["./user-services.component.scss"],
 })
 export class UserServicesComponent implements OnInit {
-	clickedRows = new Set<{}>();
+	clickedRows = new Set<Service>();
 	displayedColumns: string[] = ["name", "duration", "value", "background-color"];
-	dataSource = new MatTableDataSource<{}>();
-	selection = new SelectionModel<{}>(true, []);
+	dataSource = new MatTableDataSource<Service>();
+	selection = new SelectionModel<Service>(true, []);
 
-	constructor(private dialog: MatDialog) {}
+	constructor(private dialog: MatDialog, private api: ApiService) {}
 	ngOnInit(): void {
-		this.dataSource = new MatTableDataSource<{}>(ELEMENT_DATA);
+		this.dataSource = new MatTableDataSource<Service>(this.api.getServices());
 	}
 
 	isAllSelected() {
@@ -69,13 +49,30 @@ export class UserServicesComponent implements OnInit {
 		return isMobile();
 	}
 
-	clickedRow(row: any, event?: any) {
-		this.openDialogCreateService();
+	clickedRow(row: Service) {
+		const dialogRef = this.openDialogCreateService(row);
+
+		dialogRef.afterClosed().subscribe((formData) => {
+			console.log(formData.id);
+			if (formData?.id) {
+				this.api.deleteService(formData);
+			}
+		});
 	}
 
-	openDialogCreateService(clickInfo?: any): void {
-		const dialogRef = this.dialog.open(CreateServiceComponent, {
-			data: clickInfo?.event,
+	openDialogCreateService(data?: Service): MatDialogRef<CreateServiceComponent> {
+		return this.dialog.open(CreateServiceComponent, {
+			data: data,
 		});
+	}
+
+	addService() {
+		const dialogRef = this.openDialogCreateService();
+
+		dialogRef.afterClosed().subscribe((formData) => {
+			this.api.deleteService(formData);
+		});
+
+		this.dataSource = new MatTableDataSource<Service>(this.api.getServices());
 	}
 }

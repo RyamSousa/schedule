@@ -15,6 +15,12 @@ import { ErrorEventComponent } from "./error-event/error-event.component";
 import { ViewEventDetailsComponent } from "./view-event-details/view-event-details.component";
 import { CreateServiceComponent } from "./create-service/create-service.component";
 import { CurrencyMaskModule } from "ng2-currency-mask";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import {
+	MAT_COLOR_FORMATS,
+	NGX_MAT_COLOR_FORMATS,
+	NgxMatColorPickerModule,
+} from "@angular-material-components/color-picker";
 
 @NgModule({
 	declarations: [
@@ -25,6 +31,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 	],
 	imports: [
 		CommonModule,
+		BrowserAnimationsModule,
 		ReactiveFormsModule,
 		MatFormFieldModule,
 		MatDialogModule,
@@ -34,6 +41,7 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 		MatOptionModule,
 		CurrencyMaskModule,
 		NgxMaskModule.forRoot(),
+		NgxMatColorPickerModule,
 	],
 	providers: [
 		{
@@ -43,6 +51,10 @@ import { CurrencyMaskModule } from "ng2-currency-mask";
 		{
 			provide: MAT_DIALOG_DATA,
 			useValue: {},
+		},
+		{
+			provide: MAT_COLOR_FORMATS,
+			useValue: NGX_MAT_COLOR_FORMATS,
 		},
 		CalendarService,
 	],

@@ -6,6 +6,7 @@ const TODAY_STR = new Date().toISOString().replace(/T.*$/, ""); // YYYY-MM-DD of
 
 const SERVICES: Service[] = [
 	{
+		id: "uuid",
 		name: "Manicure",
 		duration: 50,
 		value: 50,
@@ -108,7 +109,7 @@ const CLIENT_EVENT: ClientEvent[] = [
 
 @Injectable({ providedIn: "platform" })
 export class ApiService {
-	services: Service[] = [];
+	services: Array<Service> = [];
 	clientEvents: ClientEvent[] = [];
 	officeTime: OfficeTime = { maxOfficeTime: "", minOfficeTime: "" };
 
@@ -133,6 +134,13 @@ export class ApiService {
 
 	addService(service: Service) {
 		this.services.push(service);
+	}
+
+	deleteService(service: Service) {
+		const index: number = this.services.indexOf(service);
+		if (index !== -1) {
+			this.services.splice(index, 1);
+		}
 	}
 
 	getOfficeTime() {

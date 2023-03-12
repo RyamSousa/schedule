@@ -1,30 +1,54 @@
-mat-table {
-    margin: 30px;
-    padding: 20px;
-}
+.container {
+    margin-top: 30px;
+    margin-left: 30px;
 
-.mdc-data-table__table {
-    min-width: fit-content;
-}
+    .button-container {
+        margin-bottom: 30px;
+    }
 
-::ng-deep mat-checkbox {
-    &.mdc-checkbox--selected {
-        .mdc-checkbox__backgroud {
-            background-color: black !important;
+    mat-table {
+        margin-right: 30px;
+        padding: 20px;
+
+        tr {
+            td {
+                vertical-align: middle !important;
+
+                .span-color {
+                    margin-top: 3px;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 5px;
+                    padding: 5px;
+                    color: #fff;
+                }
+            }
         }
     }
-}
 
-.mat-mdc-row .mat-mdc-cell {
-    border-bottom: 1px solid transparent;
-    border-top: 1px solid transparent;
-    cursor: pointer;
-}
+    .mdc-data-table__table {
+        min-width: fit-content;
+    }
 
-.mat-mdc-row:hover .mat-mdc-cell {
-    border-color: #3f51b5;
-}
+    ::ng-deep mat-checkbox {
+        &.mdc-checkbox--selected {
+            .mdc-checkbox__backgroud {
+                background-color: black !important;
+            }
+        }
+    }
 
-.row-is-clicked {
-    font-weight: bold;
+    .mat-mdc-row .mat-mdc-cell {
+        border-bottom: 1px solid transparent;
+        border-top: 1px solid transparent;
+        cursor: pointer;
+    }
+
+    .mat-mdc-row:hover .mat-mdc-cell {
+        border-color: #3f51b5;
+    }
+
+    .row-is-clicked {
+        font-weight: bold;
+    }
 }

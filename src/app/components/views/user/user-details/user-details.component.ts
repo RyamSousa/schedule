@@ -17,7 +17,7 @@ export class UserDetailsComponent implements OnInit {
 	sidenav!: MatSidenav;
 	services: Service[] = [];
 
-	openPageService: boolean = false;
+	openPageService: boolean = true;
 	selectable: boolean = false;
 
 	constructor(
