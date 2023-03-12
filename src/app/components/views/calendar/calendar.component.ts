@@ -121,13 +121,10 @@ export class CalendarComponent implements OnInit {
 		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
 		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
 		this.calendarOptions["initialEvents"] = this.eventsCalendar;
-
 		if (this.selectable === undefined) {
 			this.selectable = true;
 		}
-
 		this.calendarOptions["selectable"] = this.selectable;
-
 		if (isMobile()) {
 			this.calendarOptions["initialView"] = "timeGridFourDay";
 			this.calendarOptions["headerToolbar"] = {

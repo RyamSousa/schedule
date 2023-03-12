@@ -21,6 +21,7 @@ export class UserServicesComponent implements OnInit {
 	constructor(private dialog: MatDialog, private api: ApiService) {}
 	ngOnInit(): void {
 		this.dataSource = new MatTableDataSource<Service>(this.api.getServices());
+		console.log(this.dataSource);
 	}
 
 	isAllSelected() {
@@ -70,7 +71,12 @@ export class UserServicesComponent implements OnInit {
 		const dialogRef = this.openDialogCreateService();
 
 		dialogRef.afterClosed().subscribe((formData) => {
-			this.api.deleteService(formData);
+			console.log(formData);
+
+			if (formData) {
+				formData.backgroundColor = `#${formData?.backgroundColor.hex}`;
+				this.api.addService(formData);
+			}
 		});
 
 		this.dataSource = new MatTableDataSource<Service>(this.api.getServices());

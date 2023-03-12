@@ -12,6 +12,8 @@ import { ThemePalette } from "@angular/material/core";
 export class CreateServiceComponent implements OnInit {
 	form!: FormGroup;
 	color: ThemePalette = "primary";
+	lockButtonSave: boolean = true;
+	isAble = true;
 
 	constructor(
 		private dialogRef: MatDialogRef<CreateServiceComponent>,
@@ -38,14 +40,28 @@ export class CreateServiceComponent implements OnInit {
 				Validators.required
 			),
 		});
+
+		this.form.valueChanges.subscribe(() => {
+			if (this.form.valid) {
+				this.lockButtonSave = false;
+			}
+		});
 	}
 
 	save() {
-		this.dialogRef.close(this.form?.value);
+		if (this.form.valid) {
+			this.dialogRef.close(this.form.value);
+		} else {
+			this.dialogRef.close();
+		}
 	}
 
 	deleteService() {
-		this.dialogRef.close(this.data);
+		if (this.form.valid) {
+			this.dialogRef.close(this.data);
+		} else {
+			this.dialogRef.close();
+		}
 	}
 
 	onNoClick(): void {
