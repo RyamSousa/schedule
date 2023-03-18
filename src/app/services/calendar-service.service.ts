@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { CalendarApi, DateSelectArg } from "@fullcalendar/core";
 import * as moment from "moment";
 import { ErrorEventComponent } from "../components/views/dialogs/error-event/error-event.component";
-import { FormData, Service } from "../temporary-utils/data";
+import { FormData } from "../temporary-utils/data";
 import { ApiService } from "./api-service.service";
 
 @Injectable({ providedIn: "platform" })
@@ -31,12 +31,20 @@ export class CalendarService {
 					title: serviceFromDialog.name,
 					start: selectInfo.start,
 					end: moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate(),
-					backgroundColor: serviceFromDialog.backgroundColor,
+					backgroundColor: serviceFromDialog.color,
 					extendedProps: formdata,
 				});
+
 				this.apiService.addEvent({
-					client: { name: formdata.name, phone: formdata.phone },
+					uuid: "",
+					clientName: formdata.name,
+					clientPhone: formdata.phone,
 					service: formdata.service,
+					start: selectInfo.start.toISOString(),
+					end: moment(selectInfo.start)
+						.add(serviceFromDialog.duration, "m")
+						.toDate()
+						.toISOString(),
 				});
 			}
 		}

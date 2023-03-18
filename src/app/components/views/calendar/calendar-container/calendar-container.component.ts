@@ -4,25 +4,31 @@ import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import localePt from "@fullcalendar/core/locales/pt";
 import { MatDialog } from "@angular/material/dialog";
-import { CreateEventComponent } from "../dialogs/create-event/create-event.component";
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
-import { ClientEvent, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
+import { Event, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
 import { isMobile } from "src/app/temporary-utils/functions";
+import { CalendarDirective } from "src/app/directives/calendar.directive";
+import { CalendarChildComponent } from "../calendar-child/calendar-child.component";
+import { CalendarItem } from "../calendar-child/calendar-item";
+import { CreateEventComponent } from "../../dialogs/create-event/create-event.component";
 
 @Component({
-	selector: "app-calendar",
-	templateUrl: "./calendar.component.html",
-	styleUrls: ["./calendar.component.scss"],
+	selector: "app-calendar-container",
+	templateUrl: "./calendar-container.component.html",
+	styleUrls: ["./calendar-container.component.scss"],
 })
-export class CalendarComponent implements OnInit {
+export class CalendarContainerComponent implements OnInit {
 	@Input() optionalDialogEvent!: Function;
 	@Input() selectable!: boolean;
+	@Input() userId!: string;
 
-	events: ClientEvent[] = [];
+	@ViewChild(CalendarDirective, { static: true }) calendarChild!: CalendarDirective;
+
+	events: Event[] = [];
 	services: Service[] = [];
-	officeTime: OfficeTime = { maxOfficeTime: "", minOfficeTime: "" };
+	officeTime!: OfficeTime;
 	eventsCalendar: EventCalendar[] = [];
 
 	calendarOptions: CalendarOptions = {
@@ -62,25 +68,26 @@ export class CalendarComponent implements OnInit {
 		private dialog: MatDialog
 	) {}
 
-	ngOnInit(): void {
-		this.events = this.apiService.getEvents();
-		this.services = this.apiService.getServices();
-		this.officeTime = this.apiService.getOfficeTime();
-		this.events.forEach((e) =>
-			this.eventsCalendar.push({
-				title: e.service.name,
-				start: e.service.start,
-				end: e.service.end,
-				backgroundColor: e.service.backgroundColor,
-				extendedProps: {
-					client: e.client,
-					value: e.service.value,
-					duration: e.service.duration,
-				},
-			})
+	async ngOnInit() {
+		await this.getEvents();
+		this.loadCalendar();
+		// this.apiService.getServices().subscribe((services) => (this.services = services));
+		//
+		// User ID na linha abaixo
+		//
+		// this.apiService.getOfficeTime(1).subscribe((u) => (this.officeTime = u.officeTime));
+	}
+
+	loadCalendar() {
+		const viewContainerRef = this.calendarChild.viewContainerRef;
+		viewContainerRef.clear();
+
+		let calendarItem = new CalendarItem(CalendarChildComponent, this.calendarOptions);
+		const componentRef = viewContainerRef.createComponent<CalendarChildComponent>(
+			calendarItem.component
 		);
 
-		this.setCalendarOptions();
+		componentRef.instance.calendarOptions = this.calendarOptions;
 	}
 
 	openDialog(selectInfo: DateSelectArg): void {
@@ -117,9 +124,32 @@ export class CalendarComponent implements OnInit {
 		this.changeDetector.detectChanges();
 	}
 
-	setCalendarOptions() {
+	async getEvents() {
+		this.events = await this.apiService.getEvents();
+
+		this.events.forEach((e) => {
+			this.eventsCalendar.push({
+				title: e.service.name,
+				start: e.start,
+				end: e.end,
+				backgroundColor: e.service.color,
+				extendedProps: {
+					eventData: e,
+				},
+			});
+		});
+
+		await this.setCalendarOptions();
+	}
+
+	async setCalendarOptions() {
+		this.officeTime = await (await this.apiService.getOfficeTime(1)).officeTime;
+		console.log(this.officeTime);
+
 		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
 		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
+		console.log(this.calendarOptions["slotMinTime"]);
+
 		this.calendarOptions["initialEvents"] = this.eventsCalendar;
 		if (this.selectable === undefined) {
 			this.selectable = true;
@@ -131,6 +161,5 @@ export class CalendarComponent implements OnInit {
 				right: "prev,next",
 			};
 		}
-		console.log(this.calendarOptions["initialView"]);
 	}
 }

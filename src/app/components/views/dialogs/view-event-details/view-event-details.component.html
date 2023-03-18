@@ -2,16 +2,16 @@
 <div class="content" mat-dialog-content>
     <div class="client-informations">
         <h1>Cliente</h1>
-        <span>{{ client.name }}</span>
-        <a href="https://wa.me/{{ client.phone }}" target="_blank">{{
-            client.phone
+        <span>{{ event.clientName }}</span>
+        <a href="https://wa.me/{{ event.clientPhone }}" target="_blank">{{
+            event.clientPhone
         }}</a>
     </div>
     <div class="service-informations">
         <h1>Serviço</h1>
         <span>{{ service.name }}</span>
-        <span>{{ service.value }}</span>
-        <span>{{ service.duration }}</span>
+        <span>R$ {{ service.value }}</span>
+        <span>{{ service.duration }} minutos</span>
     </div>
 </div>
 <div mat-dialog-actions>

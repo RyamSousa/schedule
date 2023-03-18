@@ -50,11 +50,11 @@
     </mat-sidenav>
     <mat-sidenav-content>
         <div class="content mat-elevation-z8">
-            <app-calendar
+            <app-calendar-container
                 *ngIf="!openPageService"
                 [optionalDialogEvent]="openDialogEvent"
                 [selectable]="selectable"
-            ></app-calendar>
+            ></app-calendar-container>
             <app-user-services
                 *ngIf="!isMobile() && openPageService"
             ></app-user-services>

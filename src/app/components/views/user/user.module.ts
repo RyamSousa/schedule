@@ -12,9 +12,12 @@ import { MatButtonModule } from "@angular/material/button";
 import { UserServicesComponent } from "./user-services/user-services.component";
 import { MatTableModule } from "@angular/material/table";
 import { MatCheckboxModule } from "@angular/material/checkbox";
+import { ServiceTableComponent } from "../../service-table/service-table.component";
+import { HttpClient, HttpClientModule } from "@angular/common/http";
+import { ApiService } from "src/app/services/api-service.service";
 
 @NgModule({
-	declarations: [UserDetailsComponent, UserServicesComponent],
+	declarations: [UserDetailsComponent, UserServicesComponent, ServiceTableComponent],
 	imports: [
 		CommonModule,
 		RouterModule,
@@ -27,7 +30,9 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 		MatFormFieldModule,
 		MatTableModule,
 		MatCheckboxModule,
+		HttpClientModule,
 	],
 	exports: [UserDetailsComponent],
+	providers: [HttpClient, ApiService],
 })
 export class UserModule {}

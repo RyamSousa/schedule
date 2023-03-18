@@ -1,6 +1,6 @@
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { CalendarComponent } from "./calendar/calendar.component";
+import { CalendarContainerComponent } from "./calendar/calendar-container/calendar-container.component";
 import { UserDetailsRoutingModule } from "./user/user-details-routing.module";
 import { UserDetailsComponent } from "./user/user-details/user-details.component";
 
@@ -10,7 +10,7 @@ const routes: Routes = [
 		component: UserDetailsComponent,
 		loadChildren: () => UserDetailsRoutingModule,
 	},
-	{ path: "calendar", component: CalendarComponent },
+	{ path: "calendar", component: CalendarContainerComponent },
 ];
 
 @NgModule({

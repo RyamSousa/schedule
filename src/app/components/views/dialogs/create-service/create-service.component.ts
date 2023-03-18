@@ -36,7 +36,7 @@ export class CreateServiceComponent implements OnInit {
 				Validators.maxLength(3),
 			]),
 			backgroundColor: new FormControl(
-				this.data?.backgroundColor ? this.data.backgroundColor : "",
+				this.data?.color ? this.data.color : "",
 				Validators.required
 			),
 		});

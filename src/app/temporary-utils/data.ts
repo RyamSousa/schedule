@@ -1,29 +1,8 @@
-export interface Service {
-	id?: string;
-	name: string;
-	value: number;
-	duration: number;
-	start: string;
-	end: string;
-	backgroundColor: string;
-}
-
-export interface FormData {
-	name: string;
-	phone: string;
-	service: Service;
-}
-
-export interface ClientEvent {
-	client: ClientData;
-	service: Service;
-}
-export interface ClientData {
-	name: string;
-	phone: string;
-}
-
 export interface UserData {
+	id: number;
+	uuid: string;
+	name: string;
+	occupation: string;
 	officeTime: OfficeTime;
 	services: Service[];
 }
@@ -33,14 +12,38 @@ export interface OfficeTime {
 	minOfficeTime: string;
 }
 
+export interface Service {
+	id?: string;
+	uuid: string;
+	name: string;
+	duration: number;
+	value: number;
+	color: string;
+	user?: UserData;
+}
+
+export interface FormData {
+	name: string;
+	phone: string;
+	service: Service;
+}
+
+export interface Event {
+	id?: number;
+	uuid: string;
+	clientName: string;
+	clientPhone: string;
+	start: string;
+	end: string;
+	service: Service;
+}
+
 export interface EventCalendar {
 	title: string;
 	start: string;
 	end: string;
-	backgroundColor: string;
-	extendedProps: {
-		value: number;
-		client: ClientData;
-		duration: number;
+	backgroundColor?: string;
+	extendedProps?: {
+		eventData: Event;
 	};
 }
