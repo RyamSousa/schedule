@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "schedule-app-e0332"
+  },
+  "targets": {
+    "schedule-app-e0332": {
+      "hosting": {
+        "schedule": [
+          "schedule-app-e0332"
+        ]
+      }
+    }
+  }
+}

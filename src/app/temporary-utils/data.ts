@@ -28,7 +28,7 @@ export interface FormData {
 	service: Service;
 }
 
-export interface Event {
+export interface EventData {
 	id?: number;
 	uuid: string;
 	clientName: string;
@@ -44,6 +44,6 @@ export interface EventCalendar {
 	end: string;
 	backgroundColor?: string;
 	extendedProps?: {
-		eventData: Event;
+		eventData: EventData;
 	};
 }

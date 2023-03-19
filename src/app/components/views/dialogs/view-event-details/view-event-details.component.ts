@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Event, Service } from "src/app/temporary-utils/data";
+import { EventData, Service } from "src/app/temporary-utils/data";
 
 @Component({
 	selector: "app-view-event-details",
@@ -8,7 +8,7 @@ import { Event, Service } from "src/app/temporary-utils/data";
 	styleUrls: ["./view-event-details.component.scss"],
 })
 export class ViewEventDetailsComponent implements OnInit {
-	event!: Event;
+	event!: EventData;
 	service!: Service;
 
 	constructor(
@@ -31,7 +31,7 @@ export class ViewEventDetailsComponent implements OnInit {
 		};
 	}
 
-	extendedPropsToEvent(extendedProps: any): Event {
+	extendedPropsToEvent(extendedProps: any): EventData {
 		this.event = {
 			clientName: extendedProps.eventData.clientName,
 			clientPhone: extendedProps.eventData.clientPhone,

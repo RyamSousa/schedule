@@ -4,11 +4,13 @@ import { CalendarApi, DateSelectArg } from "@fullcalendar/core";
 import * as moment from "moment";
 import { ErrorEventComponent } from "../components/views/dialogs/error-event/error-event.component";
 import { FormData } from "../temporary-utils/data";
+import { validRangeEvent } from "../temporary-utils/functions";
 import { ApiService } from "./api-service.service";
+import { EventService } from "./event-service.service";
 
-@Injectable({ providedIn: "platform" })
+@Injectable()
 export class CalendarService {
-	constructor(private apiService: ApiService, private dialog: MatDialog) {}
+	constructor(private dialog: MatDialog, private eventService: EventService) {}
 
 	addEvent(selectInfo: DateSelectArg, formdata: FormData) {
 		if (!!formdata) {
@@ -17,7 +19,7 @@ export class CalendarService {
 
 			selectInfo.end = moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate();
 
-			if (!this.validRangeEvent(selectInfo, calendarApi)) {
+			if (!validRangeEvent(selectInfo, calendarApi)) {
 				this.dialog.open(ErrorEventComponent, {
 					data: "Já existe um serviço marcado neste horário",
 				});
@@ -35,8 +37,20 @@ export class CalendarService {
 					extendedProps: formdata,
 				});
 
-				this.apiService.addEvent({
-					uuid: "",
+				// this.apiService.addEvent({
+				// 	uuid: "",
+				// 	clientName: formdata.name,
+				// 	clientPhone: formdata.phone,
+				// 	service: formdata.service,
+				// 	start: selectInfo.start.toISOString(),
+				// 	end: moment(selectInfo.start)
+				// 		.add(serviceFromDialog.duration, "m")
+				// 		.toDate()
+				// 		.toISOString(),
+				// });
+
+				this.eventService.insert({
+					uuid: "uuuiiiddass",
 					clientName: formdata.name,
 					clientPhone: formdata.phone,
 					service: formdata.service,
@@ -48,70 +62,5 @@ export class CalendarService {
 				});
 			}
 		}
-	}
-
-	validRangeEvent(selectInfo: DateSelectArg, calendarApi: CalendarApi): boolean {
-		let events = calendarApi.getEvents();
-		let allowed = true;
-
-		events.forEach((event) => {
-			let selectStart = new Date(selectInfo.start);
-			let selectEnd = new Date(selectInfo.end);
-			let actualStart = new Date((event?.start as unknown) as string);
-			let actualEnd = new Date((event?.end as unknown) as string);
-			let actualDay = actualStart.getDay();
-			let selectedDay = actualStart.getDay();
-
-			if (selectedDay === actualDay) {
-				// case 1: data com inicio fora e fim dentro do range
-				if (
-					selectStart < actualStart &&
-					selectStart < actualEnd &&
-					selectEnd > actualStart &&
-					selectEnd < actualEnd
-				) {
-					allowed = false;
-				}
-				// case 2: data com inicio dentro e fim fora do range
-				if (
-					selectStart > actualStart &&
-					selectStart < actualEnd &&
-					selectEnd > actualStart &&
-					selectEnd > actualEnd
-				) {
-					allowed = false;
-				}
-				// case 3: data com inicio e fim dentro do range
-				if (
-					selectStart > actualStart &&
-					selectStart < actualEnd &&
-					selectEnd > actualStart &&
-					selectEnd < actualEnd
-				) {
-					allowed = false;
-				}
-				// case 4: data com inicio e fim fora do range, mas com outra danta dentro
-				if (
-					actualStart > selectStart &&
-					actualStart < selectEnd &&
-					actualEnd > selectStart &&
-					actualEnd < selectEnd
-				) {
-					allowed = false;
-				}
-
-				// case 5: data com inicio fora e fim igual ao final do range
-				if (
-					selectStart < actualStart &&
-					selectStart < actualEnd &&
-					selectEnd > actualStart &&
-					selectEnd.getDate() === actualEnd.getDate()
-				) {
-					allowed = false;
-				}
-			}
-		});
-
-		return allowed;
 	}
 }

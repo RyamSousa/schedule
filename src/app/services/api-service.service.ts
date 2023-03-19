@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import "../temporary-utils/data";
 import { HttpClient } from "@angular/common/http";
 import { Observable } from "rxjs";
-import { Event, OfficeTime, Service, UserData } from "../temporary-utils/data";
+import { EventData, OfficeTime, Service, UserData } from "../temporary-utils/data";
 
 @Injectable()
 export class ApiService {
@@ -11,18 +11,22 @@ export class ApiService {
 
 	constructor(private httpClient: HttpClient) {}
 
-	getEvents(): Promise<Event[]> {
+	getEvents(): Promise<EventData[]> {
 		return new Promise((resolve) => {
 			this.httpClient
-				.get<Event[]>(`${this.apiUrlV1}/events`)
+				.get<EventData[]>(`${this.apiUrlV1}/events`)
 				.subscribe((data) => resolve(data));
 		});
 	}
 
-	addEvent(event: Event) {}
+	addEvent(event: EventData) {}
 
-	getServices(): Observable<Service[]> {
-		return this.httpClient.get<Service[]>(`${this.apiUrlV1}/services`);
+	getServices(): Promise<Service[]> {
+		return new Promise((resolve) => {
+			this.httpClient
+				.get<Service[]>(`${this.apiUrlV1}/services`)
+				.subscribe((data) => resolve(data));
+		});
 	}
 
 	addService(service: Service) {}

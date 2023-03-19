@@ -23,7 +23,7 @@ export class ServiceTableComponent implements OnInit {
 	constructor(private dialog: MatDialog, private api: ApiService) {}
 
 	async ngOnInit() {
-		await this.api.getServices().subscribe((services) => (this.services = services));
+		this.services = await this.api.getServices();
 		this.dataSource = new MatTableDataSource<Service>(this.services);
 	}
 

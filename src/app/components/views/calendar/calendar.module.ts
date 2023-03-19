@@ -9,6 +9,7 @@ import { HttpClient, HttpClientModule } from "@angular/common/http";
 import { CalendarDirective } from "src/app/directives/calendar.directive";
 import { CalendarChildComponent } from "./calendar-child/calendar-child.component";
 import { CalendarContainerComponent } from "./calendar-container/calendar-container.component";
+import { EventService } from "src/app/services/event-service.service";
 
 @NgModule({
 	declarations: [CalendarContainerComponent, CalendarChildComponent, CalendarDirective],
@@ -21,6 +22,6 @@ import { CalendarContainerComponent } from "./calendar-container/calendar-contai
 		HttpClientModule,
 	],
 	exports: [CalendarContainerComponent],
-	providers: [CalendarService, HttpClient],
+	providers: [CalendarService, HttpClient, EventService],
 })
 export class CalendarModule {}

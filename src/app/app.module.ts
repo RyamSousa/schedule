@@ -8,6 +8,9 @@ import { AuthModule } from "./components/auth/auth.module";
 import { ViewsModule } from "./components/views/views.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { AngularFireModule } from "@angular/fire/compat/";
+import { environment } from "src/environments/environment";
 
 @NgModule({
 	declarations: [AppComponent],
@@ -19,6 +22,9 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 		AuthModule,
 		ViewsModule,
 		MatFormFieldModule,
+		AngularFirestoreModule,
+		AngularFirestoreModule.enablePersistence(),
+		AngularFireModule.initializeApp(environment.firebaseConfig),
 	],
 	bootstrap: [AppComponent],
 })

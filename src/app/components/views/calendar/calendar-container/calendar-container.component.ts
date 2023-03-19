@@ -7,7 +7,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { CalendarService } from "src/app/services/calendar-service.service";
 import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
-import { Event, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
+import { EventData, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
 import { isMobile } from "src/app/temporary-utils/functions";
 import { CalendarDirective } from "src/app/directives/calendar.directive";
 import { CalendarChildComponent } from "../calendar-child/calendar-child.component";
@@ -26,7 +26,7 @@ export class CalendarContainerComponent implements OnInit {
 
 	@ViewChild(CalendarDirective, { static: true }) calendarChild!: CalendarDirective;
 
-	events: Event[] = [];
+	events: EventData[] = [];
 	services: Service[] = [];
 	officeTime!: OfficeTime;
 	eventsCalendar: EventCalendar[] = [];
@@ -71,7 +71,7 @@ export class CalendarContainerComponent implements OnInit {
 	async ngOnInit() {
 		await this.getEvents();
 		this.loadCalendar();
-		// this.apiService.getServices().subscribe((services) => (this.services = services));
+		await this.getServices();
 		//
 		// User ID na linha abaixo
 		//
@@ -161,5 +161,9 @@ export class CalendarContainerComponent implements OnInit {
 				right: "prev,next",
 			};
 		}
+	}
+
+	async getServices() {
+		this.services = await this.apiService.getServices();
 	}
 }
