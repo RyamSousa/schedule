@@ -11,13 +11,13 @@ export class ApiService {
 
 	constructor(private httpClient: HttpClient) {}
 
-	getEvents(): Promise<EventData[]> {
-		return new Promise((resolve) => {
-			this.httpClient
-				.get<EventData[]>(`${this.apiUrlV1}/events`)
-				.subscribe((data) => resolve(data));
-		});
-	}
+	// getEvents(): Promise<EventData[]> {
+	// 	return new Promise((resolve) => {
+	// 		this.httpClient
+	// 			.get<EventData[]>(`${this.apiUrlV1}/events`)
+	// 			.subscribe((data) => resolve(data));
+	// 	});
+	// }
 
 	addEvent(event: EventData) {}
 
@@ -33,10 +33,10 @@ export class ApiService {
 
 	deleteService(service: Service) {}
 
-	getOfficeTime(userId: number): Promise<UserData> {
+	getOfficeTime(userUuid: string): Promise<UserData> {
 		return new Promise((resolve) => {
 			this.httpClient
-				.get<UserData>(`${this.apiUrlV1}/users/${userId}`)
+				.get<UserData>(`${this.apiUrlV1}/users/${userUuid}`)
 				.subscribe((data) => resolve(data));
 		});
 	}

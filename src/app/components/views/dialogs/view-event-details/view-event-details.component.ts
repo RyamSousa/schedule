@@ -33,12 +33,13 @@ export class ViewEventDetailsComponent implements OnInit {
 
 	extendedPropsToEvent(extendedProps: any): EventData {
 		this.event = {
+			uuid: extendedProps.eventData.uuid,
+			uuidUser: extendedProps.eventData.uuidUser,
 			clientName: extendedProps.eventData.clientName,
 			clientPhone: extendedProps.eventData.clientPhone,
 			start: extendedProps.eventData.start,
 			end: extendedProps.eventData.end,
 			service: extendedProps.eventData.service,
-			uuid: extendedProps.eventData.uuid,
 		};
 
 		return this.event;

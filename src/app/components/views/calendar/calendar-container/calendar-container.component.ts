@@ -1,11 +1,8 @@
 import { ChangeDetectorRef, Component, OnInit, Input, ViewChild } from "@angular/core";
 import { CalendarOptions, DateSelectArg, EventClickArg, EventApi } from "@fullcalendar/core";
-import interactionPlugin from "@fullcalendar/interaction";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import localePt from "@fullcalendar/core/locales/pt";
+
 import { MatDialog } from "@angular/material/dialog";
 import { CalendarService } from "src/app/services/calendar-service.service";
-import { INITIAL_EVENTS } from "src/app/configs/event-utils";
 import { ApiService } from "src/app/services/api-service.service";
 import { EventData, EventCalendar, OfficeTime, Service } from "src/app/temporary-utils/data";
 import { isMobile } from "src/app/temporary-utils/functions";
@@ -13,6 +10,8 @@ import { CalendarDirective } from "src/app/directives/calendar.directive";
 import { CalendarChildComponent } from "../calendar-child/calendar-child.component";
 import { CalendarItem } from "../calendar-child/calendar-item";
 import { CreateEventComponent } from "../../dialogs/create-event/create-event.component";
+import { EventService } from "src/app/services/event-service.service";
+import { calendarSettings } from "./calendar-tools";
 
 @Component({
 	selector: "app-calendar-container",
@@ -20,74 +19,46 @@ import { CreateEventComponent } from "../../dialogs/create-event/create-event.co
 	styleUrls: ["./calendar-container.component.scss"],
 })
 export class CalendarContainerComponent implements OnInit {
-	@Input() optionalDialogEvent!: Function;
-	@Input() selectable!: boolean;
-	@Input() userId!: string;
-
 	@ViewChild(CalendarDirective, { static: true }) calendarChild!: CalendarDirective;
 
+	@Input() optionalDialogEvent!: Function;
+	@Input() selectable!: boolean;
+	@Input() userUuid: string = "fe99b6a6-0bf0-475c-b45e-45ba53f09580";
+
+	calendarSettings: CalendarOptions = {};
 	events: EventData[] = [];
 	services: Service[] = [];
 	officeTime!: OfficeTime;
 	eventsCalendar: EventCalendar[] = [];
-
-	calendarOptions: CalendarOptions = {
-		plugins: [interactionPlugin, timeGridPlugin],
-		initialView: "timeGridWeek",
-		titleFormat: { year: "numeric", month: "long", day: "2-digit" },
-		headerToolbar: {
-			left: "title",
-			right: "today prev,next",
-		},
-		views: {
-			timeGridFourDay: {
-				type: "timeGrid",
-				duration: { days: 4 },
-			},
-		},
-		allDaySlot: false,
-		locale: localePt,
-		weekends: true,
-		editable: false,
-		selectable: true,
-		initialEvents: INITIAL_EVENTS,
-		selectMirror: true,
-		dayMaxEvents: true,
-		select: this.handleDateSelect.bind(this),
-		eventClick: this.handleEventClick.bind(this),
-		eventsSet: this.handleEvents.bind(this),
-		longPressDelay: 10,
-		contentHeight: "auto",
-	};
 	currentEvents: EventApi[] = [];
 
 	constructor(
 		private changeDetector: ChangeDetectorRef,
 		private calendarService: CalendarService,
 		private apiService: ApiService,
+		private eventService: EventService,
 		private dialog: MatDialog
 	) {}
 
 	async ngOnInit() {
+		let userData = await this.apiService.getOfficeTime(this.userUuid);
+		this.officeTime = userData.officeTime;
+		this.services = await this.apiService.getServices();
 		await this.getEvents();
+		await this.setCalendarOptions();
 		this.loadCalendar();
-		await this.getServices();
-		//
-		// User ID na linha abaixo
-		//
-		// this.apiService.getOfficeTime(1).subscribe((u) => (this.officeTime = u.officeTime));
 	}
 
 	loadCalendar() {
 		const viewContainerRef = this.calendarChild.viewContainerRef;
 		viewContainerRef.clear();
 
-		let calendarItem = new CalendarItem(CalendarChildComponent, this.calendarOptions);
+		let calendarItem = new CalendarItem(CalendarChildComponent, this.calendarSettings);
 		const componentRef = viewContainerRef.createComponent<CalendarChildComponent>(
 			calendarItem.component
 		);
 
-		componentRef.instance.calendarOptions = this.calendarOptions;
+		componentRef.instance.calendarOptions = this.calendarSettings;
 	}
 
 	openDialog(selectInfo: DateSelectArg): void {
@@ -96,12 +67,12 @@ export class CalendarContainerComponent implements OnInit {
 		});
 
 		dialogRef.afterClosed().subscribe((formData) => {
-			this.calendarService.addEvent(selectInfo, formData);
+			this.calendarService.addEvent(selectInfo, formData, this.userUuid);
 		});
 	}
 
 	handleWeekendsToggle() {
-		const { calendarOptions } = this;
+		const { calendarSettings: calendarOptions } = this;
 		calendarOptions.weekends = !calendarOptions.weekends;
 	}
 
@@ -125,7 +96,7 @@ export class CalendarContainerComponent implements OnInit {
 	}
 
 	async getEvents() {
-		this.events = await this.apiService.getEvents();
+		this.events = await this.eventService.findAll(this.userUuid);
 
 		this.events.forEach((e) => {
 			this.eventsCalendar.push({
@@ -138,32 +109,26 @@ export class CalendarContainerComponent implements OnInit {
 				},
 			});
 		});
-
-		await this.setCalendarOptions();
 	}
 
 	async setCalendarOptions() {
-		this.officeTime = await (await this.apiService.getOfficeTime(1)).officeTime;
-		console.log(this.officeTime);
+		this.calendarSettings = calendarSettings;
+		this.calendarSettings["slotMinTime"] = this.officeTime.minOfficeTime;
+		this.calendarSettings["slotMaxTime"] = this.officeTime.maxOfficeTime;
+		this.calendarSettings["initialEvents"] = this.eventsCalendar;
+		this.calendarSettings["select"] = this.handleDateSelect.bind(this);
+		this.calendarSettings["eventClick"] = this.handleEventClick.bind(this);
+		this.calendarSettings["eventsSet"] = this.handleEvents.bind(this);
 
-		this.calendarOptions["slotMinTime"] = this.officeTime.minOfficeTime;
-		this.calendarOptions["slotMaxTime"] = this.officeTime.maxOfficeTime;
-		console.log(this.calendarOptions["slotMinTime"]);
-
-		this.calendarOptions["initialEvents"] = this.eventsCalendar;
 		if (this.selectable === undefined) {
 			this.selectable = true;
 		}
-		this.calendarOptions["selectable"] = this.selectable;
+		this.calendarSettings["selectable"] = this.selectable;
 		if (isMobile()) {
-			this.calendarOptions["initialView"] = "timeGridFourDay";
-			this.calendarOptions["headerToolbar"] = {
+			this.calendarSettings["initialView"] = "timeGridFourDay";
+			this.calendarSettings["headerToolbar"] = {
 				right: "prev,next",
 			};
 		}
-	}
-
-	async getServices() {
-		this.services = await this.apiService.getServices();
 	}
 }

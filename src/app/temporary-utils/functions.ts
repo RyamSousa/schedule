@@ -1,4 +1,5 @@
 import { CalendarApi, DateSelectArg } from "@fullcalendar/core";
+import { v4 as uuidv4 } from "uuid";
 
 export const BREAKPOINTS = {
 	xs: { max: 425 },
@@ -8,6 +9,10 @@ export const BREAKPOINTS = {
 	xl: { min: 1025, max: 1440 },
 	xxl: { min: 1441 },
 };
+
+export function generateUUid() {
+	return uuidv4();
+}
 
 export function isMobile() {
 	const width =

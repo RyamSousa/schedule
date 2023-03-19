@@ -4,20 +4,18 @@ import { CalendarApi, DateSelectArg } from "@fullcalendar/core";
 import * as moment from "moment";
 import { ErrorEventComponent } from "../components/views/dialogs/error-event/error-event.component";
 import { FormData } from "../temporary-utils/data";
-import { validRangeEvent } from "../temporary-utils/functions";
-import { ApiService } from "./api-service.service";
+import { generateUUid, validRangeEvent } from "../temporary-utils/functions";
 import { EventService } from "./event-service.service";
 
 @Injectable()
 export class CalendarService {
 	constructor(private dialog: MatDialog, private eventService: EventService) {}
 
-	addEvent(selectInfo: DateSelectArg, formdata: FormData) {
+	async addEvent(selectInfo: DateSelectArg, formdata: FormData, userUuid: string) {
 		if (!!formdata) {
 			let serviceFromDialog = formdata.service;
 			const calendarApi = selectInfo.view.calendar;
-
-			selectInfo.end = moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate();
+			let endDate = moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate();
 
 			if (!validRangeEvent(selectInfo, calendarApi)) {
 				this.dialog.open(ErrorEventComponent, {
@@ -27,39 +25,28 @@ export class CalendarService {
 			}
 
 			if (!!formdata.service && !!serviceFromDialog.name) {
-				calendarApi.unselect();
-				calendarApi.addEvent({
-					id: "",
-					title: serviceFromDialog.name,
-					start: selectInfo.start,
-					end: moment(selectInfo.start).add(serviceFromDialog.duration, "m").toDate(),
-					backgroundColor: serviceFromDialog.color,
-					extendedProps: formdata,
-				});
+				try {
+					await this.eventService.insert({
+						uuid: generateUUid(),
+						uuidUser: userUuid,
+						clientName: formdata.name,
+						clientPhone: formdata.phone,
+						service: formdata.service,
+						start: selectInfo.start.toISOString(),
+						end: endDate.toISOString(),
+					});
 
-				// this.apiService.addEvent({
-				// 	uuid: "",
-				// 	clientName: formdata.name,
-				// 	clientPhone: formdata.phone,
-				// 	service: formdata.service,
-				// 	start: selectInfo.start.toISOString(),
-				// 	end: moment(selectInfo.start)
-				// 		.add(serviceFromDialog.duration, "m")
-				// 		.toDate()
-				// 		.toISOString(),
-				// });
-
-				this.eventService.insert({
-					uuid: "uuuiiiddass",
-					clientName: formdata.name,
-					clientPhone: formdata.phone,
-					service: formdata.service,
-					start: selectInfo.start.toISOString(),
-					end: moment(selectInfo.start)
-						.add(serviceFromDialog.duration, "m")
-						.toDate()
-						.toISOString(),
-				});
+					calendarApi.unselect();
+					calendarApi.addEvent({
+						title: serviceFromDialog.name,
+						start: selectInfo.start,
+						end: endDate,
+						backgroundColor: serviceFromDialog.color,
+						extendedProps: formdata,
+					});
+				} catch (error) {
+					throw new Error();
+				}
 			}
 		}
 	}

@@ -29,8 +29,8 @@ export interface FormData {
 }
 
 export interface EventData {
-	id?: number;
 	uuid: string;
+	uuidUser: string;
 	clientName: string;
 	clientPhone: string;
 	start: string;
