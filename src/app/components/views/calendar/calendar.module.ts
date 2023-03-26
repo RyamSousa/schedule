@@ -10,9 +10,15 @@ import { CalendarDirective } from "src/app/directives/calendar.directive";
 import { CalendarChildComponent } from "./calendar-child/calendar-child.component";
 import { CalendarContainerComponent } from "./calendar-container/calendar-container.component";
 import { EventService } from "src/app/services/event-service.service";
+import { FormatTimeTextPipe } from "src/app/pipes/format-time-text.pipe";
 
 @NgModule({
-	declarations: [CalendarContainerComponent, CalendarChildComponent, CalendarDirective],
+	declarations: [
+		CalendarContainerComponent,
+		CalendarChildComponent,
+		CalendarDirective,
+		FormatTimeTextPipe,
+	],
 	imports: [
 		CommonModule,
 		CalendarRoutingModule,

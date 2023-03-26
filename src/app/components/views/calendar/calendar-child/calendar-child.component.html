@@ -2,7 +2,7 @@
     <div class="calendar-content">
         <full-calendar [options]="calendarOptions">
             <ng-template #eventContent let-arg>
-                <b>{{ arg.timeText }}</b>
+                <b>{{ arg.timeText | appFormatTimeText }}</b>
                 <i>{{ arg.event.title }}</i>
             </ng-template>
         </full-calendar>

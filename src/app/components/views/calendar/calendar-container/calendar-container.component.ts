@@ -97,6 +97,7 @@ export class CalendarContainerComponent implements OnInit {
 
 	async getEvents() {
 		this.events = await this.eventService.findAll(this.userUuid);
+		console.log(this.events);
 
 		this.events.forEach((e) => {
 			this.eventsCalendar.push({
